@@ -49,16 +49,78 @@ The core feature of DocVault is a **Chrome extension** that categorizes and stor
 
 ---
 
-## 📅 Milestones  
+## Milestones
 
-| **Week** | **Tasks** |
-|----------|----------|
-| **1-2**  | Project planning, repo setup, finalize tech stack. |
-| **3-4**  | Develop Chrome extension, integrate with AWS S3, implement initial categorization. |
-| **5-6**  | Build backend (API Gateway, Lambda, DynamoDB), authentication, UI setup. |
-| **7-8**  | Implement AI chatbot, improve categorization, add AWS Translate. |
-| **9**    | Unit testing, integration testing, user testing. |
-| **10**   | Final refinements, bug fixes, documentation. |
+<details>
+  <summary>Week 1-2: Project Planning & Setup</summary>
+
+  - Define project goals and milestones
+  - Set up GitHub repository
+  - Finalize tech stack
+  - Establish development environment
+  - Assign team roles
+
+</details>
+
+<details>
+  <summary>Week 3-4: Chrome Extension Development & AWS S3 Integration</summary>
+
+  **Frontend:**
+  - Develop initial Chrome extension UI
+  - Implement basic user interactions
+
+  **Backend:**
+  - Integrate AWS S3 for document storage
+  - Implement initial categorization features
+
+</details>
+
+<details>
+  <summary>Week 5-6: Backend Development & Authentication</summary>
+
+  **Frontend:**
+  - Set up UI components for authentication
+  - Connect frontend to backend API
+
+  **Backend:**
+  - Build API Gateway, Lambda functions, and DynamoDB integration
+  - Implement user authentication system
+  - Deploy backend infrastructure
+
+</details>
+
+<details>
+  <summary>Week 7-8: AI Chatbot & AWS Translate Integration</summary>
+
+  **Frontend:**
+  - Enhance UI for chatbot interactions
+  - Improve document categorization UI
+
+  **Backend:**
+  - Implement AI chatbot for document-related queries
+  - Improve document categorization using AI
+  - Integrate AWS Translate for multilingual support
+
+</details>
+
+<details>
+  <summary>Week 9: Testing Phase</summary>
+
+  - Conduct unit testing
+  - Perform integration testing
+  - Conduct user testing and gather feedback
+
+</details>
+
+<details>
+  <summary>Week 10: Final Refinements & Documentation</summary>
+
+  - Fix bugs and polish UI
+  - Finalize documentation
+  - Prepare for presentation
+
+</details>
+
 
 ---
 
