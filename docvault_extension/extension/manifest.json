@@ -1,0 +1,22 @@
+{
+    "name": "docVault Extension",
+    "description": "Extension for docVault to integrate downloaded files on Chrome to the docVault cloud",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "action": {
+        "default_popup": "index.html",
+        "default_icon": "vault.png"
+    },
+    "permissions": [
+        "storage",
+        "browsingData",
+        "downloads",
+        "downloads.open",
+        "downloads.ui"
+    ],
+    "icons": {
+        "16": "vault.png",
+        "48": "vault.png",
+        "128": "vault.png"
+    }
+}
