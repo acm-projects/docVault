@@ -9,12 +9,12 @@ type ButtonProps = {
   const Button = ({ type, title, icon, variant, full }: ButtonProps) => {
     return (
       <button
-      className={`flexCenter gap-3 rounded-full border ${variant} ${full && 'w-full'}`}
+      className={`transition-all hover:font-bold flexCenter rounded-2xl border ${variant} ${full && 'w-full'}`}
         type={type}
       >
-        <label className="bold-16 whitespace-nowrap cursor-pointer">{title}</label>
+        <label className="lg:px-5 whitespace-nowrap cursor-pointer">{title}</label>
       </button>
     )
   }
   
-  export default Button
+  export default Button;
