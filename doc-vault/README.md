@@ -34,3 +34,25 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+type ButtonProps = {
+    type: 'button' | 'submit';
+    title: string;
+    icon?: string;
+    variant: string;
+    full?: boolean;
+  }
+  
+  const Button = ({ type, title, icon, variant, full }: ButtonProps) => {
+    return (
+      <button
+      className={`transition-all hover:font-bold flexCenter rounded-2xl border ${variant} ${full && 'w-full'}`}
+        type={type}
+      >
+        <label className="lg:px-5 whitespace-nowrap cursor-pointer">{title}</label>
+      </button>
+    )
+  }
+  
+  export default Button;

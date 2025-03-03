@@ -1,5 +1,5 @@
 "use client";
-import Button from "@/components/ui/Button";
+import CustomBtn from "@/components/ui/customBtn";
 import Link from "next/link";
 
 export default function Login() {
@@ -73,11 +73,13 @@ export default function Login() {
                         </div>
 
                         <div className="flexCenter">
-                        <Button 
-                            type="submit"
-                            title="Log In"
-                            variant="btn_red"
-                        />
+                        <Link href="/personal">
+                            <CustomBtn 
+                                type="submit"
+                                title="Log In"
+                                variant="btn_red"
+                            />
+                        </Link>
                         </div>
                     </form>
 

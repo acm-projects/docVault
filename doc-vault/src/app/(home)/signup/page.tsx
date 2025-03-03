@@ -1,5 +1,5 @@
 "use client";
-import Button from "@/components/ui/Button";
+import CustomBtn from "@/components/ui/customBtn";
 import { Dropdown } from "@/components/ui/Dropdown";
 import Link from "next/link";
 
@@ -143,7 +143,7 @@ export default function Signup() {
                 </div>
 
                 <div className="flexCenter">
-                  <Button 
+                  <CustomBtn 
                     type="submit"
                     title="Sign Up"
                     variant="btn_red"

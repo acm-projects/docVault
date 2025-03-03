@@ -1,6 +1,6 @@
 "use client"
 import Link from 'next/link';
-import Button from './ui/Button';
+import CustomBtn from './ui/customBtn';
 import React from 'react';
 
 const NAV_LINKS = [
@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <nav className="text-darkblue relative py-5">
       <div className="mx-auto flexBetween padding-container">
-        <Link className="text-2xl font-semibold" href="/">
+        <Link className="text-3xl font-semibold" href="/">
           docVault
         </Link>
 
@@ -25,7 +25,7 @@ const Navbar = () => {
           ))}
 
           <Link href="/login">
-            <Button 
+            <CustomBtn 
               type="button"
               title="Log In"
               variant="btn_red"
