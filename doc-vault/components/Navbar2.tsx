@@ -32,15 +32,24 @@ const Navbar2 = () => {
                 side="top"
                 className="w-[--radix-popper-anchor-width]"
             >
+              <Link href="/account">
                 <DropdownMenuItem>
-                    <span>Account</span>
+                  <span>Account</span>
                 </DropdownMenuItem>
+              </Link>
+                
+              <Link href="/settings">
                 <DropdownMenuItem>
-                    <span>Settings</span>
+                  <span>Settings</span>
                 </DropdownMenuItem>
+              </Link>
+                
+              <Link href="#">
                 <DropdownMenuItem>
-                    <span>Sign out</span>
+                  <span>Sign out</span>
                 </DropdownMenuItem>
+              </Link>
+              
             </DropdownMenuContent>
         </DropdownMenu>
         </ul>
