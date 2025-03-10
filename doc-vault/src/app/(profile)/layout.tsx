@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import "@/app/globals.css";
-import Navbar2 from "@/components/Navbar2";
+import NavbarAcc from "@/components/NavbarAcc";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen">
-        <Navbar2 />
+        <NavbarAcc />
         <main className="flex-grow relative overflow-hidden">
           {children}
         </main>
