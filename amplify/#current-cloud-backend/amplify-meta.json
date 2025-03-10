@@ -1,0 +1,80 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-docvault-dev-3a9d1-authRole",
+      "UnauthRoleArn": "arn:aws:iam::296062593943:role/amplify-docvault-dev-3a9d1-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::296062593943:role/amplify-docvault-dev-3a9d1-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-docvault-dev-3a9d1-deployment",
+      "UnauthRoleName": "amplify-docvault-dev-3a9d1-unauthRole",
+      "StackName": "amplify-docvault-dev-3a9d1",
+      "StackId": "arn:aws:cloudformation:us-east-2:296062593943:stack/amplify-docvault-dev-3a9d1/d1013460-f313-11ef-aa3c-06b6e3f07615",
+      "AmplifyAppId": "d1t1t4iqb4amxh"
+    }
+  },
+  "auth": {
+    "docvault": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": [
+            "REQUIRES_LOWERCASE",
+            "REQUIRES_NUMBERS",
+            "REQUIRES_SYMBOLS",
+            "REQUIRES_UPPERCASE"
+          ]
+        },
+        "signupAttributes": [
+          "EMAIL",
+          "NAME"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "output": {
+        "UserPoolId": "us-east-2_4HX7M8cay",
+        "AppClientIDWeb": "12vn3170e3h2l0dldrfcui2kin",
+        "AppClientID": "7e4rjsmhkuhhluc6gi9sisj525",
+        "IdentityPoolId": "us-east-2:59de92aa-36d7-46a7-81df-fd47c2deeafb",
+        "UserPoolArn": "arn:aws:cognito-idp:us-east-2:296062593943:userpool/us-east-2_4HX7M8cay",
+        "IdentityPoolName": "testAuthIdentityPool__dev",
+        "UserPoolName": "docvault"
+      },
+      "lastPushTimeStamp": "2025-03-04T00:48:49.885Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-docvault-dev-3a9d1-deployment/amplify-cfn-templates/auth/docvault-cloudformation-template.json",
+        "logicalId": "authdocvault"
+      }
+    }
+  },
+  "storage": {
+    "s3docvaultfiles": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "lastPushTimeStamp": "2025-03-04T00:48:49.979Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-docvault-dev-3a9d1-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
+        "logicalId": "storages3docvaultfiles"
+      },
+      "output": {
+        "BucketName": "docvaultfiles3a9d1-dev",
+        "Region": "us-east-2"
+      },
+      "lastPushDirHash": "T+mOyaQXGJmpB+GhVNpY83yQ9Bs="
+    }
+  }
+}
