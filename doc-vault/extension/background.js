@@ -6,7 +6,7 @@ chrome.downloads.onChanged.addListener(function(delta) {
                 path = results[0].filename;
                 console.log(path);
                 chrome.action.setPopup({
-                    popup: 'popup.html'
+                    popup: 'detect.html'
                 });
                 chrome.action.openPopup();
                
