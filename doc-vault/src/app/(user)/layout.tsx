@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "@/app/globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
+import NavbarSearch from "@/components/NavbarSearch";
 
 export const metadata: Metadata = {
   title: "docVault",
@@ -13,12 +14,18 @@ export default function RootLayout({ children,}: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen">
-        <SidebarProvider>
-            <AppSidebar />
-            <main>
-            <SidebarTrigger />
-            {children}
+      <SidebarProvider>
+          <AppSidebar />
+          <div className="flex flex-col flex-1">
+            <header className="flex items-center gap-2 bg-white p-4 w-full">
+              <SidebarTrigger />
+              <NavbarSearch />
+            </header>
+
+            <main className="flex-1 p-4">
+              {children}
             </main>
+          </div>
         </SidebarProvider>
       </body>
     </html>

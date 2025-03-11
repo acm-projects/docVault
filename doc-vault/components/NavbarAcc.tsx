@@ -9,7 +9,7 @@ const userInfo = [
   { name: "Your Name", icon: <CircleUserRound size={50}/> },
 ];
 
-const Navbar2 = () => {
+const NavbarAcc = () => {
   return (
     <nav className="text-darkblue relative py-5">
       <div className="mx-auto flexBetween padding-container">
@@ -21,7 +21,7 @@ const Navbar2 = () => {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <div className="flexCenter">
-                <Button className="text-darkblue bg-white shadow-none font-light text-lg">
+                <Button className="text-darkblue bg-white shadow-none font-light text-lg hover:bg-white transition-all hover:font-bold">
                     <ChevronDown className="ml-auto" />
                     <span>{userInfo[0].name}</span>
                 </Button>
@@ -58,4 +58,4 @@ const Navbar2 = () => {
   )
 }
 
-export default Navbar2;
+export default NavbarAcc;
