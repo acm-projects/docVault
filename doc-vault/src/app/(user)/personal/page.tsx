@@ -1,6 +1,6 @@
 import { FileTable } from '@/components/FileTable'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/Button'
 import { Toggle } from '@/components/ui/toggle'
 import { CornerDownRight, Filter } from 'lucide-react'
 import React from 'react'

@@ -13,8 +13,8 @@
 body {
   font-family: "Lexend", serif;
   font-optical-sizing: auto;
-  min-width: 300px;
-  min-height: 450px;
+  min-width: 250px;
+  min-height: 350px;
 }
 
 @layer utilities {
@@ -27,6 +27,10 @@ body {
   .btn_red  { 
     @apply  border-lighterred bg-lighterred px-8 py-5 text-white hover:bg-red;
   }
+  .btn_gray  { 
+    @apply  border-lightergray bg-lightergray px-8 py-5 text-darkblue hover:bg-gray;
+  }
+
 
   .btn_red_outline  { 
     @apply border-lighterred bg-white px-8 py-5;
