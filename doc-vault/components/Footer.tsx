@@ -10,7 +10,7 @@ const FOOTER_LINKS = [
 
 const Footer = () => {
   return (
-    <footer className="text-white bg-red w-full py-10">
+    <footer className="text-white bg-red w-full p-10">
       <div className="mx-auto flexBetween padding-container">
         <Link className="text-2xl font-semibold" href="/">
           docVault
