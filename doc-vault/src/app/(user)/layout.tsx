@@ -7,6 +7,7 @@ import NavbarSearch from "@/components/NavbarSearch";
 import Personal from "./personal/page";
 import School from "./school/page";
 import Work from "./work/page";
+import Chatbot from "./chatbot/page";
 
 export const metadata: Metadata = {
   title: "docVault",
@@ -26,6 +27,7 @@ export default function RootLayout({ children,}: Readonly<{ children: React.Reac
             </header>
 
             <main className="flex-1 p-4">
+              <Chatbot />
               <Personal />
               <School />
               <Work />

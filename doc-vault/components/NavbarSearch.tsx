@@ -32,7 +32,7 @@ const NavbarAcc = () => {
     };
 
   return (
-    <nav className="text-darkblue w-full relative py-5">
+    <nav className="text-darkblue w-full relative p-10">
       <div className="flexCenter padding-container">
 
         <div className="flex-1 flex">

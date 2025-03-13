@@ -11,7 +11,7 @@ const userInfo = [
 
 const NavbarAcc = () => {
   return (
-    <nav className="text-darkblue relative py-5">
+    <nav className="text-darkblue relative p-10">
       <div className="mx-auto flexBetween padding-container">
         <Link className="text-3xl font-semibold" href="/">
           docVault
