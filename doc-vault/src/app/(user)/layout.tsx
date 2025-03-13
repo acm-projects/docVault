@@ -4,6 +4,9 @@ import "@/app/globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
 import NavbarSearch from "@/components/NavbarSearch";
+import Personal from "./personal/page";
+import School from "./school/page";
+import Work from "./work/page";
 
 export const metadata: Metadata = {
   title: "docVault",
@@ -23,7 +26,9 @@ export default function RootLayout({ children,}: Readonly<{ children: React.Reac
             </header>
 
             <main className="flex-1 p-4">
-              {children}
+              <Personal />
+              <School />
+              <Work />
             </main>
           </div>
         </SidebarProvider>

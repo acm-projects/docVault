@@ -21,15 +21,15 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collap
 const items = [
   {
     title: "Personal",
-    url: "/personal",
+    url: "#personal",
   },
   {
     title: "School",
-    url: "/school",
+    url: "#school",
   },
   {
     title: "Work",
-    url: "/work",
+    url: "#work",
   },
 ]
 

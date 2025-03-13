@@ -1,6 +1,5 @@
 import { FileTable } from '@/components/FileTable'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
-import { Button } from '@/components/ui/button'
 import { Toggle } from '@/components/ui/toggle'
 import { CornerDownRight, Filter } from 'lucide-react'
 import React from 'react'
@@ -82,37 +81,39 @@ const Personal = () => {
   ]
   
   return (
-    <div className="text-darkblue max-container padding-container mt-8">
-      <h1 className="p-4 text-4xl font-bold text-lighterred">Personal</h1>
-      <div className="p-4">
-        <div className="flex justify-end text-darkblue gap-2">
-          <Toggle variant="outline" aria-label="Toggle created date">Created</Toggle>
-          <Toggle variant="outline" aria-label="Toggle modified date">Modified</Toggle>
-          <Toggle variant="outline" aria-label="Toggle tag">Tag</Toggle>
-          <Toggle variant="outline" aria-label="Toggle type">Type</Toggle>
-          <Filter className="mx-3" size={32} />
+    <section id="personal">
+      <div className="text-darkblue max-container padding-container mb-10 mt-8">
+        <h1 className="p-4 text-4xl font-bold text-lighterred">Personal</h1>
+        <div className="p-4">
+          <div className="flex justify-end text-darkblue gap-2">
+            <Toggle variant="outline" aria-label="Toggle created date">Created</Toggle>
+            <Toggle variant="outline" aria-label="Toggle modified date">Modified</Toggle>
+            <Toggle variant="outline" aria-label="Toggle tag">Tag</Toggle>
+            <Toggle variant="outline" aria-label="Toggle type">Type</Toggle>
+            <Filter className="mx-3" size={32} />
+          </div>
+              
+          <Accordion type="single" collapsible>
+            {folders.map((folder) => (
+              <AccordionItem key={folder.name} className="my-5 p-5 border-darkblue border bg-gray-400 rounded-md" value={folder.name}>
+                <div className='flex gap-5'>
+                  <img src={folder.img} alt={folder.name} className="w-40 h-40 rounded-md" />
+                    <div>
+                      <h2 className="text-xl">{folder.name}</h2>
+                      <p className="py-2 font-light">{folder.body}</p>
+                      <AccordionTrigger></AccordionTrigger>
+                    </div>
+                </div>
+                <AccordionContent className='flex py-5 pl-2'>
+                  <CornerDownRight className="text-darkblue mr-3 w-10 h-10" />
+                  <FileTable files={files} />
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
-            
-        <Accordion type="single" collapsible>
-          {folders.map((folder) => (
-            <AccordionItem key={folder.name} className="my-5 p-5 border-darkblue border bg-gray-400 rounded-md" value={folder.name}>
-              <div className='flex gap-5'>
-                <img src={folder.img} alt={folder.name} className="w-40 h-40 rounded-md" />
-                  <div>
-                    <h2 className="text-xl">{folder.name}</h2>
-                    <p className="py-2 font-light">{folder.body}</p>
-                    <AccordionTrigger></AccordionTrigger>
-                  </div>
-              </div>
-              <AccordionContent className='flex py-5 pl-2'>
-                <CornerDownRight className="text-darkblue mr-3 w-10 h-10" />
-                <FileTable files={files} />
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
       </div>
-    </div>
+    </section>
   )
 }
 
