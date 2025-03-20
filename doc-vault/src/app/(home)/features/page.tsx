@@ -36,8 +36,7 @@ const Features = () => {
         <p className="py-5 md:w-1/2">
           Discover the powerful features that make docVault seamless, secure, 
           and efficient. Our intuitive platform offers everything you need to 
-          organize, collaborate, and access your files effortlessly. Browse the features 
-          below to see how we can help you manage documents with ease. 
+          organize, collaborate, and access your files effortlessly. 
         </p>
         <div className="p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-10">
           {features.map((feature) => (
