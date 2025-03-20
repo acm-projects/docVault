@@ -1,7 +1,7 @@
 import { FileTable } from '@/components/FileTable'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Toggle } from '@/components/ui/toggle'
-import { CornerDownRight, Filter } from 'lucide-react'
+import { CornerDownRight, Filter, FolderClosed } from 'lucide-react'
 import React from 'react'
 
 const Personal = () => {
@@ -9,70 +9,66 @@ const Personal = () => {
     {
       name: "Personal Documents",
       body: "This is a folder for personal documents.",
-      img: "https://placehold.co/400",
     },
     {
       name: "Legal Documents",
       body: "This is a folder for legal documents.",
-      img: "https://placehold.co/400",
     },
     {
       name: "Property Information",
       body: "This is a folder for property documents.",
-      img: "https://placehold.co/400",
     },
     {
       name: "Other Documents",
       body: "This is a folder for other documents.",
-      img: "https://placehold.co/400",
     },
   ]
 
   const files = [
     {
-        name: "ExampleFile.txt",
+        name: "ExampleFile",
         type: ".txt",
         tag: "Project 1",
         created: "01/01/2025",
         modified: "02/01/2025",
     },
     {
-        name: "ExampleFile1.txt",
+        name: "ExampleFile1",
         type: ".pdf",
         tag: "Project 1",
         created: "01/10/2025",
         modified: "09/01/2025",
     },
     {
-        name: "ExampleFile2.txt",
+        name: "ExampleFile2",
         type: ".jpeg",
         tag: "Project 2",
         created: "01/01/2024",
         modified: "02/01/2025",
     },
     {
-        name: "ExampleFile3.txt",
+        name: "ExampleFile3",
         type: ".docx",
         tag: "Project 3",
         created: "01/01/2023",
         modified: "02/01/2025",
     },
     {
-        name: "ExampleFile4.txt",
+        name: "ExampleFile4",
         type: ".pdf",
         tag: "Project 3",
         created: "01/01/2022",
         modified: "02/01/2022",
     },
     {
-        name: "ExampleFile5.txt",
+        name: "ExampleFile5",
         type: ".txt",
         tag: "Project 1",
         created: "01/01/2021",
         modified: "02/01/2021",
     },
     {
-        name: "ExampleFile6.txt",
+        name: "ExampleFile6",
         type: ".pptx",
         tag: "Project 2",
         created: "01/01/2021",
@@ -97,7 +93,7 @@ const Personal = () => {
             {folders.map((folder) => (
               <AccordionItem key={folder.name} className="my-5 p-5 border-darkblue border bg-gray-400 rounded-md" value={folder.name}>
                 <div className='flex gap-5'>
-                  <img src={folder.img} alt={folder.name} className="w-40 h-40 rounded-md" />
+                  <FolderClosed className="text-slate-700" strokeWidth={1} size={90}/>
                     <div>
                       <h2 className="text-xl">{folder.name}</h2>
                       <p className="py-2 font-light">{folder.body}</p>
