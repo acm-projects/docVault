@@ -1,10 +1,85 @@
 "use client"
 
 import { DueDateTable } from '@/components/DueDateTable'
+import { FileTable } from '@/components/FileTable'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import { Toggle } from '@/components/ui/toggle'
+import { CornerDownRight, Filter, FolderClosed } from 'lucide-react'
 import React, { useState } from 'react'
 
 const School = () => {
-  const [files, setFiles] = useState([
+  const folders = [
+    {
+      name: "CS 3377",
+      body: "Systems Programming in Unix and Other Environments",
+    },
+    {
+      name: "ECS 2390",
+      body: "Professional and Technical Communications",
+    },
+    {
+      name: "CS 3345",
+      body: "Data Structures and Algorithms",
+    },
+    {
+      name: "PHYS 2426",
+      body: "University Physics II + Lab",
+    },
+  ]
+
+  const files = [
+    {
+        name: "ExampleFile",
+        type: ".txt",
+        tag: "Project 1",
+        created: "01/01/2025",
+        modified: "02/01/2025",
+    },
+    {
+        name: "ExampleFile1",
+        type: ".pdf",
+        tag: "Project 1",
+        created: "01/10/2025",
+        modified: "09/01/2025",
+    },
+    {
+        name: "ExampleFile2",
+        type: ".jpeg",
+        tag: "Project 2",
+        created: "01/01/2024",
+        modified: "02/01/2025",
+    },
+    {
+        name: "ExampleFile3",
+        type: ".docx",
+        tag: "Project 3",
+        created: "01/01/2023",
+        modified: "02/01/2025",
+    },
+    {
+        name: "ExampleFile4",
+        type: ".pdf",
+        tag: "Project 3",
+        created: "01/01/2022",
+        modified: "02/01/2022",
+    },
+    {
+        name: "ExampleFile5",
+        type: ".txt",
+        tag: "Project 1",
+        created: "01/01/2021",
+        modified: "02/01/2021",
+    },
+    {
+        name: "ExampleFile6",
+        type: ".pptx",
+        tag: "Project 2",
+        created: "01/01/2021",
+        modified: "02/01/2021",
+    },
+  ]
+
+  const [hwFiles, setHwFiles] = useState([
     {
         name: "Homework 1 - Basic Time Complexity",
         tag: "Priority",
@@ -40,7 +115,7 @@ const School = () => {
   ])
 
   const addNewFile = (newFile: any) => {
-    setFiles((prevFiles) => [...prevFiles, newFile])
+    setHwFiles((prevFiles) => [...prevFiles, newFile])
   }
 
   return (
@@ -51,15 +126,37 @@ const School = () => {
         </div>
 
         <div className="p-4 py-5">
-          <DueDateTable files={files} addNewFile={addNewFile} />
+          <DueDateTable files={hwFiles} addNewFile={addNewFile} />
         </div>
 
         <div className="p-4 py-5">
-          <h1 className="py-5 text-2xl font-bold text-lighterred">Notes</h1>
-        </div>
-
-        <div className="p-4 py-5">
-          <h1 className="py-5 text-2xl font-bold text-lighterred">Syllabus</h1>
+          <h1 className="py-5 text-3xl font-medium text-lighterred">Notes</h1>
+          <div className="flex justify-end text-darkblue gap-2">
+            <Toggle variant="outline" aria-label="Toggle created date">Created</Toggle>
+            <Toggle variant="outline" aria-label="Toggle modified date">Modified</Toggle>
+            <Toggle variant="outline" aria-label="Toggle tag">Tag</Toggle>
+            <Toggle variant="outline" aria-label="Toggle type">Type</Toggle>
+            <Filter className="mx-3" size={32} />
+          </div>
+              
+          <Accordion type="single" collapsible>
+            {folders.map((folder) => (
+              <AccordionItem key={folder.name} className="my-5 p-5 border-darkblue border bg-gray-400 rounded-md" value={folder.name}>
+                <div className='flex gap-5'>
+                  <FolderClosed className="text-slate-700" strokeWidth={1} size={90}/>
+                    <div>
+                      <h2 className="text-xl">{folder.name}</h2>
+                      <p className="py-2 font-light">{folder.body}</p>
+                      <AccordionTrigger></AccordionTrigger>
+                    </div>
+                </div>
+                <AccordionContent className='flex py-5 pl-2'>
+                  <CornerDownRight className="text-darkblue mr-3 w-10 h-10" />
+                  <FileTable files={files} />
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </div>
     </section>

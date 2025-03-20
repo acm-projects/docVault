@@ -8,6 +8,7 @@ import Personal from "./personal/page";
 import School from "./school/page";
 import Work from "./work/page";
 import Chatbot from "./chatbot/page";
+import ScrollToTopButton from "@/components/ui/ScrollToTopButton";
 
 export const metadata: Metadata = {
   title: "docVault",
@@ -18,6 +19,7 @@ export default function RootLayout({ children,}: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen">
+      <ScrollToTopButton />
       <SidebarProvider>
           <AppSidebar />
           <div className="flex flex-col flex-1">
