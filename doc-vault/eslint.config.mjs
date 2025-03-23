@@ -17,6 +17,7 @@ const eslintConfig = [
   ...compat.config({
     extends: ["next/core-web-vitals", "next/typescript"],
     rules: {
+      '@next/next/no-sync-scripts': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
     },
   }),
