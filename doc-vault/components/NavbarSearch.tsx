@@ -5,10 +5,9 @@ import { ChevronDown, CircleUserRound, Search } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Button } from './ui/button';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useUser } from '@/context/UserContext';
 
-const userInfo = [
-  { name: "Your Name", icon: <CircleUserRound size={50}/> },
-];
+const icon = <CircleUserRound size={50}/>;
 
 const NavbarAcc = () => {
     
@@ -30,6 +29,8 @@ const NavbarAcc = () => {
 
         replace(`${pathname}?${params.toString()}`);
     };
+
+    const { firstName, lastName } = useUser();
 
   return (
     <nav className="text-darkblue w-full relative p-10">
@@ -55,9 +56,9 @@ const NavbarAcc = () => {
                     <div className="flexCenter ml-20">
                     <Button className="text-darkblue bg-white shadow-none font-light text-lg transition-all hover:font-bold hover:bg-white">
                         <ChevronDown className="ml-2" />
-                        <span>{userInfo[0].name}</span>
+                        <span>{firstName} {lastName}</span>
                     </Button>
-                    <span>{userInfo[0].icon}</span>
+                    <span>{icon}</span>
                     </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
