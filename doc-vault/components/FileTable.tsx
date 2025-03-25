@@ -1,9 +1,7 @@
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
@@ -11,6 +9,7 @@ import {
    
   interface File {
     name: string;
+    path: string;
     type: string;
     tag: string;
     modified: string;
@@ -19,9 +18,10 @@ import {
 
   interface FileTableProps {
     files: File[];
+    onFileSelect: (file: File) => void;
   }
 
-  export function FileTable({ files }: FileTableProps) {
+  export function FileTable({ files, onFileSelect }: FileTableProps) {
     return (
       <Table className="text-darkblue border-2 rounded-lg border-gray-200">
         <TableHeader className="text-darkblue bg-gray-100">
@@ -34,8 +34,12 @@ import {
           </TableRow>
         </TableHeader>
         <TableBody className="rounded-md">
-            {files.map((file) => (
-            <TableRow className="px-5" key={file.name}>
+          {files.map((file) => (
+            <TableRow 
+              key={file.name}
+              className="px-5 cursor-pointer hover:bg-gray-200 transition"
+              onClick={() => onFileSelect(file)}
+            >
                 <TableCell className="font-medium pr-8">{file.name}</TableCell>
                 <TableCell>{file.type}</TableCell>
                 <TableCell>
@@ -46,7 +50,7 @@ import {
                 <TableCell>{file.modified}</TableCell>
                 <TableCell>{file.created}</TableCell>
             </TableRow>
-            ))}
+          ))}
         </TableBody>
       </Table>
     )

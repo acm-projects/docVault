@@ -72,7 +72,7 @@ const Account = () => {
                   onChange={(e) => {
                     setFirstName(e.target.value);
                   }}
-                  className="border border-middlegray block w-1/2 rounded-md py-1.5 px-3 text-gray-900 
+                  className="border border-middlegray block rounded-md py-1.5 px-3 text-gray-900 
                             shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
               ) : (
@@ -87,7 +87,7 @@ const Account = () => {
                   onChange={(e) => {
                     setLastName(e.target.value);
                   }}
-                  className="border border-middlegray block w-1/2 rounded-md py-1.5 px-3 text-gray-900 
+                  className="border border-middlegray block rounded-md py-1.5 px-3 text-gray-900 
                             shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
               ) : (

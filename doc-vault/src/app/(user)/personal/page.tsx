@@ -1,10 +1,14 @@
+"use client"
+
 import { FileTable } from '@/components/FileTable'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Toggle } from '@/components/ui/toggle'
 import { CornerDownRight, Filter, FolderClosed } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
 
 const Personal = () => {
+  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  
   const folders = [
     {
       name: "Personal Documents",
@@ -27,6 +31,7 @@ const Personal = () => {
   const files = [
     {
         name: "ExampleFile",
+        path: "./uploads/ExampleFile.txt",
         type: ".txt",
         tag: "Project 1",
         created: "01/01/2025",
@@ -34,6 +39,7 @@ const Personal = () => {
     },
     {
         name: "ExampleFile1",
+        path: "./uploads/ExampleFile1.pdf",
         type: ".pdf",
         tag: "Project 1",
         created: "01/10/2025",
@@ -41,6 +47,7 @@ const Personal = () => {
     },
     {
         name: "ExampleFile2",
+        path: "./uploads/ExampleFile2.jpeg",
         type: ".jpeg",
         tag: "Project 2",
         created: "01/01/2024",
@@ -48,6 +55,7 @@ const Personal = () => {
     },
     {
         name: "ExampleFile3",
+        path: "./uploads/ExampleFile3.docx",
         type: ".docx",
         tag: "Project 3",
         created: "01/01/2023",
@@ -55,6 +63,7 @@ const Personal = () => {
     },
     {
         name: "ExampleFile4",
+        path: "./uploads/ExampleFile4.pdf",
         type: ".pdf",
         tag: "Project 3",
         created: "01/01/2022",
@@ -62,6 +71,7 @@ const Personal = () => {
     },
     {
         name: "ExampleFile5",
+        path: "./uploads/ExampleFile5.txt",
         type: ".txt",
         tag: "Project 1",
         created: "01/01/2021",
@@ -69,15 +79,37 @@ const Personal = () => {
     },
     {
         name: "ExampleFile6",
-        type: ".pptx",
+        path: "./uploads/ExampleFile6.jpeg",
+        type: ".jpeg",
         tag: "Project 2",
         created: "01/01/2021",
         modified: "02/01/2021",
     },
   ]
+
+  const handleFileSelect = (file: { name: string; path?: string; type: string }) => {
+    if (!file.path) {
+      return;
+    }
+  
+    const fileUrl = `${window.location.origin}${file.path.replace("./", "/")}`;
+  
+    console.log("Opening file:", fileUrl);
+  
+    if (file.type === ".pdf" || file.type === ".jpeg") {
+      window.open(fileUrl, "_blank");
+    } 
+    
+    else if (file.type === ".docx") {
+      window.open(`https://docs.google.com/gview?url=${fileUrl}&embedded=true`, "_blank");
+    } 
+    
+    else {
+      window.open(fileUrl, "_blank");
+    }
+  };
   
   return (
-    <section id="personal">
       <div className="text-darkblue max-container padding-container mb-10 mt-8">
         <h1 className="p-4 text-4xl font-bold text-lighterred">Personal</h1>
         <div className="p-4">
@@ -102,14 +134,20 @@ const Personal = () => {
                 </div>
                 <AccordionContent className='flex py-5 pl-2'>
                   <CornerDownRight className="text-darkblue mr-3 w-10 h-10" />
-                  <FileTable files={files} />
+                  <FileTable files={files} onFileSelect={handleFileSelect} />
                 </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
+
+          {selectedFile && (
+            <div className="mt-6 p-4 bg-white border rounded-lg shadow-md">
+              <h2 className="text-lg font-semibold">Opened File: {selectedFile}</h2>
+              <p className="text-gray-600">File preview or editing options will be displayed here.</p>
+            </div>
+          )}
         </div>
       </div>
-    </section>
   )
 }
 

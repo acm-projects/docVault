@@ -19,12 +19,12 @@ const NavbarAcc = () => {
         const params = new URLSearchParams(searchParams);
         if (searchTerm) 
         {
-            params.set("query", searchTerm);
+            params.set("navQuery", searchTerm);
         }
 
         else 
         {
-            params.delete("query");
+            params.delete("navQuery");
         }
 
         replace(`${pathname}?${params.toString()}`);
@@ -41,7 +41,7 @@ const NavbarAcc = () => {
                 <input
                     placeholder="Search"
                     className="peer block w-full rounded-lg py-[9px] pl-10 text-sm outline-2 bg-lightergray placeholder:text-darkblue"
-                    defaultValue={searchParams.get("query")?.toString()}
+                    defaultValue={searchParams.get("navQuery")?.toString()}
                     onChange={(e) => {
                         handleSearch(e.target.value);
                     }}

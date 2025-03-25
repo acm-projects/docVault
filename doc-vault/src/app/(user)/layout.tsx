@@ -32,9 +32,9 @@ export default function RootLayout({ children,}: Readonly<{ children: React.Reac
 
               <main className="flex-1 p-4">
                 <Chatbot />
-                <Personal />
-                <School />
-                <Work />
+                <section id="personal"><Personal /></section>
+                <section id="school"><School /></section>
+                <section id="work"><Work /></section>
               </main>
             </div>
           </SidebarProvider>

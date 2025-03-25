@@ -119,8 +119,7 @@ const School = () => {
   }
 
   return (
-    <section id="school">
-      <div className="min-h-screen text-darkblue max-container padding-container mt-8">
+    <div className="min-h-screen text-darkblue max-container padding-container mt-8">
         <div className="p-4">
           <h1 className="py-5 text-4xl font-bold text-lighterred">School</h1>
         </div>
@@ -159,7 +158,6 @@ const School = () => {
           </Accordion>
         </div>
       </div>
-    </section>
   )
 }
 
