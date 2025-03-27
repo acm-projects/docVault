@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description: "A Document Management System",
 };
 
-export default function RootLayout({ children,}: Readonly<{ children: React.ReactNode;}>) {
+export default function RootLayout({ }: Readonly<{ children: React.ReactNode;}>) {
   return (
     <UserProvider>
       <html lang="en">

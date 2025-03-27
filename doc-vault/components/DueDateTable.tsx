@@ -12,7 +12,7 @@ import {
 import { CirclePlus } from "lucide-react";
 import { Checkbox } from "./ui/checkbox";
 import { Dialog } from "@radix-ui/react-dialog";
-import { DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { useState } from "react";
    

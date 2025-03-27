@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React from 'react'
 
 const About = () => {
@@ -21,7 +22,7 @@ const About = () => {
           </div>
 
           <div className="p-4 flex justify-center w-1/2">
-            <img className="rounded-md" src="https://placehold.co/400x500" />
+            <Image className="rounded-md" alt="some image" src="https://placehold.co/400x500" />
           </div>
     </div>
   )

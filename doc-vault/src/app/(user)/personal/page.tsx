@@ -4,6 +4,7 @@ import { FileTable } from "@/components/FileTable";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Toggle } from "@/components/ui/toggle";
 import { CornerDownRight, Filter, FolderClosed, X } from "lucide-react";
+//import Image from "next/image";
 import React, { useState } from "react";
 import Modal from "react-modal";
 
@@ -119,7 +120,6 @@ const Personal = () => {
             ))}
           </Accordion>
 
-          {/* Modal for File Preview */}
           <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="relative bg-white p-6 rounded-lg shadow-lg max-w-4xl w-full">
               <button onClick={() => setIsModalOpen(false)} className="absolute top-3 right-3 text-gray-600 hover:text-gray-900">

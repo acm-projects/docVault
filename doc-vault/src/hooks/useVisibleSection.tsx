@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { throttle } from "lodash";
 
 interface ISection {
@@ -24,21 +24,26 @@ export function useVisibleSection(sections: ISection[]) {
     return false;
   };
 
-  const checkVisibility = throttle(() => {
-    for (const { id } of sections) {
-      if (isSectionVisible(id)) {
-        setVisibleSectionId(id);
-        break;
+  const checkVisibility = useCallback(
+    throttle(() => {
+      for (const { id } of sections) 
+      {
+        if (isSectionVisible(id)) 
+        {
+          setVisibleSectionId(id);
+          break;
+        }
       }
-    }
-  }, 300);
+    }, 300),
+    [sections]
+  );
 
   useEffect(() => {
     window.addEventListener("scroll", checkVisibility);
     checkVisibility();
 
     return () => window.removeEventListener("scroll", checkVisibility);
-  }, [sections]);
+  }, [checkVisibility]);
 
   return visibleSectionId;
 }
