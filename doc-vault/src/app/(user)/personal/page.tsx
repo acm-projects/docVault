@@ -141,10 +141,10 @@ const Personal = () => {
             className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
           >
             <motion.div
-              initial={{ opacity: 0, y: -50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1, ease: "easeInOut" }}
               className="w-full max-w-4xl"
             >
             <div className="relative bg-white p-6 rounded-lg shadow-lg w-full">
