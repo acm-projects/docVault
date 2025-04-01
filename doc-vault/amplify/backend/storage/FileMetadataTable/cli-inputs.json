@@ -1,0 +1,10 @@
+{
+  "resourceName": "FileMetadataTable",
+  "tableName": "FileMetadataTable",
+  "partitionKey": {
+    "fieldName": "file_name",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

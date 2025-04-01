@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "auth": {
+      "docvault": [
+        "create",
+        "read",
+        "delete"
+      ]
+    },
+    "storage": {
+      "s3docvaultfiles": [
+        "create",
+        "read",
+        "delete"
+      ],
+      "FileMetadataTable": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "dynamodbTable",
+      "environmentVariableName": "DYNAMODB_TABLE"
+    }
+  ]
+}

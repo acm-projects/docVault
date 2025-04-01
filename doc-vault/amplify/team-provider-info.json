@@ -1,0 +1,31 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-docvault-dev-3a9d1-authRole",
+      "UnauthRoleArn": "arn:aws:iam::296062593943:role/amplify-docvault-dev-3a9d1-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::296062593943:role/amplify-docvault-dev-3a9d1-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-docvault-dev-3a9d1-deployment",
+      "UnauthRoleName": "amplify-docvault-dev-3a9d1-unauthRole",
+      "StackName": "amplify-docvault-dev-3a9d1",
+      "StackId": "arn:aws:cloudformation:us-east-2:296062593943:stack/amplify-docvault-dev-3a9d1/d1013460-f313-11ef-aa3c-06b6e3f07615",
+      "AmplifyAppId": "d1t1t4iqb4amxh"
+    },
+    "categories": {
+      "function": {
+        "S3Trigger": {
+          "dynamodbTable": "FileMetadataTable",
+          "deploymentBucketName": "amplify-docvault-dev-3a9d1-deployment",
+          "s3Key": "amplify-builds/S3Trigger-46336d55366f6b49456f-build.zip"
+        }
+      },
+      "auth": {
+        "docvault": {}
+      },
+      "storage": {
+        "FileMetadataTable": {},
+        "s3docvaultfiles": {}
+      }
+    }
+  }
+}
