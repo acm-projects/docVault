@@ -3,7 +3,7 @@ import AWS from "aws-sdk";
 
 // Initialize AWS Cognito
 const cognito = new AWS.CognitoIdentityServiceProvider({
-  region: "us-east-2", // Replace with your region
+  region: "us-east-2", 
 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Prepare Cognito parameters
     const params = {
-      ClientId: "41eats6rlmmn4767jvf8og41i9", // Replace with your Cognito app client ID
+      ClientId: "41eats6rlmmn4767jvf8og41i9",
       Username: email,
       Password: password,
       UserAttributes: [
