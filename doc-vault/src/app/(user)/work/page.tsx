@@ -1,80 +1,116 @@
+"use client"
+
 import { FileTable } from '@/components/FileTable'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Toggle } from '@/components/ui/toggle'
-import { CornerDownRight, Filter, FolderClosed } from 'lucide-react'
-import React from 'react'
+import { CornerDownRight, Filter, FolderClosed, X } from 'lucide-react'
+import React, { useState } from 'react'
+import Modal from "react-modal";
+import { motion } from "framer-motion";
+
+const folders = [
+  {
+    name: "Acme Corporation",
+    body: "User-Friendly Global Functionalities",
+  },
+  {
+    name: "Green Ltd",
+    body: "Front-Line Composite Open architecture",
+  },
+  {
+    name: "Hammes, Volkman and Bechtelar",
+    body: "Face to face Human-Resource Focus group",
+  },
+  {
+    name: "Emmerich LLC",
+    body: "Enhanced Grid-Enabled Workforce",
+  },
+]
+
+const files = [
+  {
+    name: "ExampleFile",
+    path: "./uploads/ExampleFile.txt",
+    type: ".txt",
+    tag: "Project 1",
+    created: "01/01/2025",
+    modified: "02/01/2025",
+  },
+  {
+    name: "ExampleFile1",
+    path: "./uploads/ExampleFile1.pdf",
+    type: ".pdf",
+    tag: "Project 1",
+    created: "01/10/2025",
+    modified: "09/01/2025",
+  },
+  {
+    name: "ExampleFile2",
+    path: "./uploads/ExampleFile2.jpeg",
+    type: ".jpeg",
+    tag: "Project 2",
+    created: "01/01/2024",
+    modified: "02/01/2025",
+  },
+  {
+    name: "ExampleFile3",
+    path: "./uploads/ExampleFile3.docx",
+    type: ".docx",
+    tag: "Project 3",
+    created: "01/01/2023",
+    modified: "02/01/2025",
+  },
+  {
+    name: "ExampleFile4",
+    path: "./uploads/ExampleFile4.pdf",
+    type: ".pdf",
+    tag: "Project 3",
+    created: "01/01/2022",
+    modified: "02/01/2022",
+  },
+  {
+    name: "ExampleFile5",
+    path: "./uploads/ExampleFile5.txt",
+    type: ".txt",
+    tag: "Project 1",
+    created: "01/01/2021",
+    modified: "02/01/2021",
+  },
+  {
+    name: "ExampleFile6",
+    path: "./uploads/ExampleFile6.jpeg",
+    type: ".jpeg",
+    tag: "Project 2",
+    created: "01/01/2021",
+    modified: "02/01/2021",
+  },
+]
 
 const Work = () => {
-  const folders = [
-    {
-      name: "Acme Corporation",
-      body: "User-Friendly Global Functionalities",
-    },
-    {
-      name: "Green Ltd",
-      body: "Front-Line Composite Open architecture",
-    },
-    {
-      name: "Hammes, Volkman and Bechtelar",
-      body: "Face to face Human-Resource Focus group",
-    },
-    {
-      name: "Emmerich LLC",
-      body: "Enhanced Grid-Enabled Workforce",
-    },
-  ]
+  const [selectedFile, setSelectedFile] = useState<{ name: string; path?: string; type: string } | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [fileContent, setFileContent] = useState("");
 
-  const files = [
-    {
-        name: "ExampleFile",
-        type: ".txt",
-        tag: "Project 1",
-        created: "01/01/2025",
-        modified: "02/01/2025",
-    },
-    {
-        name: "ExampleFile1",
-        type: ".pdf",
-        tag: "Project 1",
-        created: "01/10/2025",
-        modified: "09/01/2025",
-    },
-    {
-        name: "ExampleFile2",
-        type: ".jpeg",
-        tag: "Project 2",
-        created: "01/01/2024",
-        modified: "02/01/2025",
-    },
-    {
-        name: "ExampleFile3",
-        type: ".docx",
-        tag: "Project 3",
-        created: "01/01/2023",
-        modified: "02/01/2025",
-    },
-    {
-        name: "ExampleFile4",
-        type: ".pdf",
-        tag: "Project 3",
-        created: "01/01/2022",
-        modified: "02/01/2022",
-    },
-    {
-        name: "ExampleFile5",
-        type: ".txt",
-        tag: "Project 1",
-        created: "01/01/2021",
-        modified: "02/01/2021",
-    },
-    {
-        name: "ExampleFile6",
-        type: ".pptx",
-        tag: "Project 2",
-        created: "01/01/2021",
-        modified: "02/01/2021",
-    },
-  ]
+  const handleFileSelect = async (file: { name: string; path?: string; type: string }) => {
+    if (!file.path) {
+      alert("No file path available!");
+      return;
+    }
+
+    setSelectedFile(file);
+    setIsModalOpen(true);
+    setFileContent("");
+
+    if (file.type === ".txt") {
+      try {
+        const response = await fetch(file.path);
+        const text = await response.text();
+        setFileContent(text);
+      } catch (error) {
+        setFileContent("Failed to load file.");
+      }
+    }
+  };
   
   return (
     <div className="text-darkblue max-container padding-container mb-10 mt-8">
@@ -101,11 +137,51 @@ const Work = () => {
                 </div>
                 <AccordionContent className='flex py-5 pl-2'>
                   <CornerDownRight className="text-darkblue mr-3 w-10 h-10" />
-                  <FileTable files={files} />
+                  <FileTable files={files} onFileSelect={handleFileSelect} />
                 </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
+
+          <Modal 
+            ariaHideApp={false} 
+            isOpen={isModalOpen} 
+            onRequestClose={() => setIsModalOpen(false)} 
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+          >
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.7, ease: "easeInOut" }}
+              className="w-full max-w-4xl"
+            >
+            <div className="relative bg-white p-6 rounded-lg shadow-lg w-full">
+              <button onClick={() => setIsModalOpen(false)} className="absolute top-3 right-3 text-gray-600 hover:text-gray-900">
+                <X size={24} />
+              </button>
+
+              {selectedFile && (
+                <>
+                  <h2 className="text-lg font-semibold mb-4">{selectedFile.name}</h2>
+                  <div className="w-full h-[800px]">
+                    {selectedFile.type === ".pdf" ? (
+                      <iframe src={selectedFile.path} className="w-full h-full" />
+                    ) : selectedFile.type === ".jpeg" || selectedFile.type === ".png" ? (
+                      <img src={selectedFile.path} className="w-full h-full" alt={selectedFile.name} />
+                    ) : selectedFile.type === ".docx" ? (
+                      <iframe src={`https://docs.google.com/gview?url=${window.location.origin}${selectedFile.path}&embedded=true`} className="w-full h-full" />
+                    ) : selectedFile.type === ".txt" ? (
+                      <pre className="p-4 rounded-md">{fileContent}</pre>
+                    ) : (
+                      <p className="text-center">File preview not available</p>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+            </motion.div>
+          </Modal>
         </div>
       </div>
   )

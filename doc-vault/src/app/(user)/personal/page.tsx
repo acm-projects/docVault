@@ -8,78 +8,76 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import { motion } from "framer-motion";
 
-export const MotionDiv = motion.div;
+const folders = [
+  { name: "Personal Documents", body: "This is a folder for personal documents." },
+  { name: "Legal Documents", body: "This is a folder for legal documents." },
+  { name: "Property Information", body: "This is a folder for property documents." },
+  { name: "Other Documents", body: "This is a folder for other documents." },
+];
+
+const files = [
+  {
+      name: "ExampleFile",
+      path: "./uploads/ExampleFile.txt",
+      type: ".txt",
+      tag: "Project 1",
+      created: "01/01/2025",
+      modified: "02/01/2025",
+  },
+  {
+      name: "ExampleFile1",
+      path: "./uploads/ExampleFile1.pdf",
+      type: ".pdf",
+      tag: "Project 1",
+      created: "01/10/2025",
+      modified: "09/01/2025",
+  },
+  {
+      name: "ExampleFile2",
+      path: "./uploads/ExampleFile2.jpeg",
+      type: ".jpeg",
+      tag: "Project 2",
+      created: "01/01/2024",
+      modified: "02/01/2025",
+  },
+  {
+      name: "ExampleFile3",
+      path: "./uploads/ExampleFile3.docx",
+      type: ".docx",
+      tag: "Project 3",
+      created: "01/01/2023",
+      modified: "02/01/2025",
+  },
+  {
+      name: "ExampleFile4",
+      path: "./uploads/ExampleFile4.pdf",
+      type: ".pdf",
+      tag: "Project 3",
+      created: "01/01/2022",
+      modified: "02/01/2022",
+  },
+  {
+      name: "ExampleFile5",
+      path: "./uploads/ExampleFile5.txt",
+      type: ".txt",
+      tag: "Project 1",
+      created: "01/01/2021",
+      modified: "02/01/2021",
+  },
+  {
+      name: "ExampleFile6",
+      path: "./uploads/ExampleFile6.jpeg",
+      type: ".jpeg",
+      tag: "Project 2",
+      created: "01/01/2021",
+      modified: "02/01/2021",
+  },
+]
 
 const Personal = () => {
   const [selectedFile, setSelectedFile] = useState<{ name: string; path?: string; type: string } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fileContent, setFileContent] = useState("");
-
-  const folders = [
-    { name: "Personal Documents", body: "This is a folder for personal documents." },
-    { name: "Legal Documents", body: "This is a folder for legal documents." },
-    { name: "Property Information", body: "This is a folder for property documents." },
-    { name: "Other Documents", body: "This is a folder for other documents." },
-  ];
-
-  const files = [
-    {
-        name: "ExampleFile",
-        path: "./uploads/ExampleFile.txt",
-        type: ".txt",
-        tag: "Project 1",
-        created: "01/01/2025",
-        modified: "02/01/2025",
-    },
-    {
-        name: "ExampleFile1",
-        path: "./uploads/ExampleFile1.pdf",
-        type: ".pdf",
-        tag: "Project 1",
-        created: "01/10/2025",
-        modified: "09/01/2025",
-    },
-    {
-        name: "ExampleFile2",
-        path: "./uploads/ExampleFile2.jpeg",
-        type: ".jpeg",
-        tag: "Project 2",
-        created: "01/01/2024",
-        modified: "02/01/2025",
-    },
-    {
-        name: "ExampleFile3",
-        path: "./uploads/ExampleFile3.docx",
-        type: ".docx",
-        tag: "Project 3",
-        created: "01/01/2023",
-        modified: "02/01/2025",
-    },
-    {
-        name: "ExampleFile4",
-        path: "./uploads/ExampleFile4.pdf",
-        type: ".pdf",
-        tag: "Project 3",
-        created: "01/01/2022",
-        modified: "02/01/2022",
-    },
-    {
-        name: "ExampleFile5",
-        path: "./uploads/ExampleFile5.txt",
-        type: ".txt",
-        tag: "Project 1",
-        created: "01/01/2021",
-        modified: "02/01/2021",
-    },
-    {
-        name: "ExampleFile6",
-        path: "./uploads/ExampleFile6.jpeg",
-        type: ".jpeg",
-        tag: "Project 2",
-        created: "01/01/2021",
-        modified: "02/01/2021",
-    },
-  ]
 
   const handleFileSelect = async (file: { name: string; path?: string; type: string }) => {
     if (!file.path) {
@@ -144,7 +142,7 @@ const Personal = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1, ease: "easeInOut" }}
+              transition={{ duration: 0.7, ease: "easeInOut" }}
               className="w-full max-w-4xl"
             >
             <div className="relative bg-white p-6 rounded-lg shadow-lg w-full">

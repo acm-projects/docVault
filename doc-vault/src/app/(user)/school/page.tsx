@@ -4,8 +4,10 @@ import { DueDateTable } from '@/components/DueDateTable'
 import { FileTable } from '@/components/FileTable'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Toggle } from '@/components/ui/toggle'
-import { CornerDownRight, Filter, FolderClosed } from 'lucide-react'
+import { CornerDownRight, Filter, FolderClosed, X } from 'lucide-react'
 import React, { useState } from 'react'
+import Modal from "react-modal";
+import { motion } from "framer-motion";
 
 const folders = [
   {
@@ -89,6 +91,7 @@ const files = [
 const School = () => {
   const [selectedFile, setSelectedFile] = useState<{ name: string; path?: string; type: string } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [fileContent, setFileContent] = useState("");
 
   const [hwFiles, setHwFiles] = useState([
     {
@@ -129,7 +132,7 @@ const School = () => {
     setHwFiles((prevFiles) => [...prevFiles, newFile])
   }
 
-  const handleFileSelect = (file: { name: string; path?: string; type: string }) => {
+  const handleFileSelect = async (file: { name: string; path?: string; type: string }) => {
     if (!file.path) {
       alert("No file path available!");
       return;
@@ -137,6 +140,17 @@ const School = () => {
 
     setSelectedFile(file);
     setIsModalOpen(true);
+    setFileContent("");
+
+    if (file.type === ".txt") {
+      try {
+        const response = await fetch(file.path);
+        const text = await response.text();
+        setFileContent(text);
+      } catch (error) {
+        setFileContent("Failed to load file.");
+      }
+    }
   };
 
   return (
@@ -177,6 +191,46 @@ const School = () => {
               </AccordionItem>
             ))}
           </Accordion>
+
+          <Modal 
+            ariaHideApp={false} 
+            isOpen={isModalOpen} 
+            onRequestClose={() => setIsModalOpen(false)} 
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+          >
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.7, ease: "easeInOut" }}
+              className="w-full max-w-4xl"
+            >
+            <div className="relative bg-white p-6 rounded-lg shadow-lg w-full">
+              <button onClick={() => setIsModalOpen(false)} className="absolute top-3 right-3 text-gray-600 hover:text-gray-900">
+                <X size={24} />
+              </button>
+
+              {selectedFile && (
+                <>
+                  <h2 className="text-lg font-semibold mb-4">{selectedFile.name}</h2>
+                  <div className="w-full h-[800px]">
+                    {selectedFile.type === ".pdf" ? (
+                      <iframe src={selectedFile.path} className="w-full h-full" />
+                    ) : selectedFile.type === ".jpeg" || selectedFile.type === ".png" ? (
+                      <img src={selectedFile.path} className="w-full h-full" alt={selectedFile.name} />
+                    ) : selectedFile.type === ".docx" ? (
+                      <iframe src={`https://docs.google.com/gview?url=${window.location.origin}${selectedFile.path}&embedded=true`} className="w-full h-full" />
+                    ) : selectedFile.type === ".txt" ? (
+                      <pre className="p-4 rounded-md">{fileContent}</pre>
+                    ) : (
+                      <p className="text-center">File preview not available</p>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+            </motion.div>
+          </Modal>
         </div>
       </div>
   )

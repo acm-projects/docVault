@@ -67,7 +67,7 @@ const Chatbot = () => {
                                 <button onClick={() => setIsModalOpen(false)} className="absolute top-3 right-3 text-gray-600 hover:text-gray-900">
                                     <X size={24} />
                                 </button>
-
+                                
                                 <h2 className="text-lg font-semibold mb-4">Chatbot</h2>
                                 <div className="w-full h-[800px]">
                                     <p>This is where the chatbot would be!</p>
