@@ -8,7 +8,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-  } from "@/components/ui/table"
+} from "@/components/ui/table"
 import { CirclePlus } from "lucide-react";
 import { Checkbox } from "./ui/checkbox";
 import { Dialog } from "@radix-ui/react-dialog";
@@ -16,19 +16,19 @@ import { DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTit
 import { Button } from "./ui/button";
 import { useState } from "react";
    
-  interface File {
+interface File {
     name: string;
     tag?: string;
     due: string;
     modified: string;
-  }
+}
 
-  interface TableProps {
+interface TableProps {
     files: File[];
-    addNewFile: (newFile: File) => void;
-  }
+    addNewHwFile: (newFile: File) => void;
+}
 
-  export function DueDateTable({ files, addNewFile }: TableProps) {
+export function DueDateTable({ files, addNewHwFile }: TableProps) {
     const [newFile, setNewFile] = useState<File>({
         name: "",
         tag: "",
@@ -58,7 +58,7 @@ import { useState } from "react";
             due: formattedDueDate,
         };
     
-        addNewFile(fileToAdd);
+        addNewHwFile(fileToAdd);
         console.log("New File Added:", fileToAdd);
     
         setNewFile({
@@ -199,4 +199,4 @@ import { useState } from "react";
         </TableFooter>
       </Table>
     )
-  }
+}

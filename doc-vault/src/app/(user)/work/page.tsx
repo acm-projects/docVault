@@ -27,69 +27,73 @@ const folders = [
   },
 ]
 
-const files = [
-  {
-    name: "ExampleFile",
-    path: "./uploads/ExampleFile.txt",
-    type: ".txt",
-    tag: "Project 1",
-    created: "01/01/2025",
-    modified: "02/01/2025",
-  },
-  {
-    name: "ExampleFile1",
-    path: "./uploads/ExampleFile1.pdf",
-    type: ".pdf",
-    tag: "Project 1",
-    created: "01/10/2025",
-    modified: "09/01/2025",
-  },
-  {
-    name: "ExampleFile2",
-    path: "./uploads/ExampleFile2.jpeg",
-    type: ".jpeg",
-    tag: "Project 2",
-    created: "01/01/2024",
-    modified: "02/01/2025",
-  },
-  {
-    name: "ExampleFile3",
-    path: "./uploads/ExampleFile3.docx",
-    type: ".docx",
-    tag: "Project 3",
-    created: "01/01/2023",
-    modified: "02/01/2025",
-  },
-  {
-    name: "ExampleFile4",
-    path: "./uploads/ExampleFile4.pdf",
-    type: ".pdf",
-    tag: "Project 3",
-    created: "01/01/2022",
-    modified: "02/01/2022",
-  },
-  {
-    name: "ExampleFile5",
-    path: "./uploads/ExampleFile5.txt",
-    type: ".txt",
-    tag: "Project 1",
-    created: "01/01/2021",
-    modified: "02/01/2021",
-  },
-  {
-    name: "ExampleFile6",
-    path: "./uploads/ExampleFile6.jpeg",
-    type: ".jpeg",
-    tag: "Project 2",
-    created: "01/01/2021",
-    modified: "02/01/2021",
-  },
-]
-
 const Work = () => {
   const [selectedFile, setSelectedFile] = useState<{ name: string; path?: string; type: string } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fileContent, setFileContent] = useState("");
+
+  const [files, setFiles] = useState([
+    {
+      name: "ExampleFile",
+      path: "./uploads/ExampleFile.txt",
+      type: ".txt",
+      tag: "Project 1",
+      created: "01/01/2025",
+      modified: "02/01/2025",
+    },
+    {
+      name: "ExampleFile1",
+      path: "./uploads/ExampleFile1.pdf",
+      type: ".pdf",
+      tag: "Project 1",
+      created: "01/10/2025",
+      modified: "09/01/2025",
+    },
+    {
+      name: "ExampleFile2",
+      path: "./uploads/ExampleFile2.jpeg",
+      type: ".jpeg",
+      tag: "Project 2",
+      created: "01/01/2024",
+      modified: "02/01/2025",
+    },
+    {
+      name: "ExampleFile3",
+      path: "./uploads/ExampleFile3.docx",
+      type: ".docx",
+      tag: "Project 3",
+      created: "01/01/2023",
+      modified: "02/01/2025",
+    },
+    {
+      name: "ExampleFile4",
+      path: "./uploads/ExampleFile4.pdf",
+      type: ".pdf",
+      tag: "Project 3",
+      created: "01/01/2022",
+      modified: "02/01/2022",
+    },
+    {
+      name: "ExampleFile5",
+      path: "./uploads/ExampleFile5.txt",
+      type: ".txt",
+      tag: "Project 1",
+      created: "01/01/2021",
+      modified: "02/01/2021",
+    },
+    {
+      name: "ExampleFile6",
+      path: "./uploads/ExampleFile6.jpeg",
+      type: ".jpeg",
+      tag: "Project 2",
+      created: "01/01/2021",
+      modified: "02/01/2021",
+    },
+  ])
+
+  const addNewFile = (newFile: any) => {
+    setFiles((prevFiles) => [...prevFiles, newFile])
+  }
 
   const handleFileSelect = async (file: { name: string; path?: string; type: string }) => {
     if (!file.path) {
@@ -106,7 +110,9 @@ const Work = () => {
         const response = await fetch(file.path);
         const text = await response.text();
         setFileContent(text);
-      } catch (error) {
+      } 
+      
+      catch (error) {
         setFileContent("Failed to load file.");
       }
     }
@@ -137,7 +143,7 @@ const Work = () => {
                 </div>
                 <AccordionContent className='flex py-5 pl-2'>
                   <CornerDownRight className="text-darkblue mr-3 w-10 h-10" />
-                  <FileTable files={files} onFileSelect={handleFileSelect} />
+                  <FileTable files={files} onFileSelect={handleFileSelect} addNewFile={addNewFile}/>
                 </AccordionContent>
               </AccordionItem>
             ))}
