@@ -4,6 +4,7 @@ import * as React from "react"
 import * as AccordionPrimitive from "@radix-ui/react-accordion"
 
 import { cn } from "@/lib/utils"
+import { ChevronDown } from "lucide-react"
 
 const Accordion = AccordionPrimitive.Root
 
@@ -27,13 +28,13 @@ const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex p-2 border text-white rounded-md bg-lighterred text-lg font-normal text-center transition-all hover:font-bold",
+        "flex p-2 gap-2 border text-white rounded-md bg-lighterred text-lg font-normal text-center transition-all hover:font-bold",
         className
       )}
       {...props}
     >
       {children}
-      Open File
+      Open File <ChevronDown className="pt-1"/>
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ))

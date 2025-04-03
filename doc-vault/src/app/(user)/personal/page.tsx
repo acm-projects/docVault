@@ -131,7 +131,6 @@ const Personal = () => {
                   </div>
                 </div>
                 <AccordionContent className="flex py-5 pl-2">
-                  <CornerDownRight className="text-darkblue mr-3 w-10 h-10" />
                   <FileTable files={files} onFileSelect={handleFileSelect} addNewFile={addNewFile}/>
                 </AccordionContent>
               </AccordionItem>

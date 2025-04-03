@@ -10,6 +10,7 @@ import Work from "./work/page";
 import Chatbot from "./chatbot/page";
 import ScrollToTopButton from "@/components/ui/ScrollToTopButton";
 import { UserProvider } from "@/context/UserContext";
+import NewFile from "./newFile/page";
 
 export const metadata: Metadata = {
   title: "docVault",
@@ -32,6 +33,7 @@ export default function RootLayout({ }: Readonly<{ children: React.ReactNode;}>)
 
               <main className="flex-1 p-4">
                 <Chatbot />
+                <NewFile />
                 <section id="personal"><Personal /></section>
                 <section id="school"><School /></section>
                 <section id="work"><Work /></section>
