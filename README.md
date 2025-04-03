@@ -189,6 +189,9 @@ The core feature of DocVault is a **Chrome extension** that categorizes and stor
 - **Joanna Borba** - Industry Mentor
 
 ---
+
+![image](https://drive.google.com/uc?export=view&id=1QUczubcRUX_uEMbIY7bTA9cIHBObOCdA)
+
 ### 🚀 Get Started with DocVault Development
 Clone the repository and follow the setup instructions to contribute!
 ```bash
@@ -198,4 +201,4 @@ Clone the repository and follow the setup instructions to contribute!
   npm run dev
 
 
-![image](https://drive.google.com/uc?export=view&id=1QUczubcRUX_uEMbIY7bTA9cIHBObOCdA)
+
