@@ -6,7 +6,7 @@ from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
 import numpy as np
 
-pc = Pinecone("")
+pc = Pinecone('')
 index_name = 'docvault'
 index = pc.Index(index_name)
 
@@ -37,3 +37,4 @@ list = []
 metadata = {"content": raw_text}
 list.append(("vector 1", query_embedding, metadata))
 index.upsert(list)
+

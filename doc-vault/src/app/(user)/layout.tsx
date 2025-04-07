@@ -4,6 +4,7 @@ import "@/app/globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/AppSidebar"
 import NavbarSearch from "@/components/NavbarSearch";
+import Chat from "@/components/Chat";
 
 export const metadata: Metadata = {
   title: "docVault",
@@ -23,6 +24,7 @@ export default function RootLayout({ children,}: Readonly<{ children: React.Reac
             </header>
 
             <main className="flex-1 p-4">
+              <Chat/>
               {children}
             </main>
           </div>
