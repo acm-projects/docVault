@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Prepare Cognito parameters
     const params = {
-      ClientId: "41eats6rlmmn4767jvf8og41i9",
+      ClientId: "4ebe6m05covmud0fdeecck98os",
       Username: email,
       Password: password,
       UserAttributes: [

@@ -6,8 +6,8 @@ import { CognitoUserPool, CognitoUserAttribute } from "amazon-cognito-identity-j
 
 // AWS Cognito User Pool Configuration
 const poolData = {
-  UserPoolId: "us-east-2_AeBbEnOrS",
-  ClientId: "310qnb14vihhrg0enm4i080slc",
+  UserPoolId: "us-east-2_AjxQIAAbO",
+  ClientId: "4ebe6m05covmud0fdeecck98os",
 };
 
 const userPool = new CognitoUserPool(poolData);

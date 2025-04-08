@@ -14,7 +14,7 @@ export default function Login() {
     e.preventDefault();
     setError(""); // Clear previous errors
 
-    const clientId = "310qnb14vihhrg0enm4i080slc"; // Replace with your Cognito App Client ID
+    const clientId = "4ebe6m05covmud0fdeecck98os"; // Replace with your Cognito App Client ID
     const url = `https://cognito-idp.us-east-2.amazonaws.com/`; // Replace with your region, e.g., us-east-1
 
     const requestBody = {
@@ -35,18 +35,31 @@ export default function Login() {
         },
         body: JSON.stringify(requestBody),
       });
-
+    
+      const responseText = await response.text(); // Read raw body
+      console.log("Status:", response.status);
+      console.log("Raw response:", responseText);
+    
       if (!response.ok) {
-        throw new Error("Login failed");
+        throw new Error("Login failed: " + responseText);
       }
-
-      const data = await response.json();
+    
+      const data = JSON.parse(responseText);
       console.log("Login successful:", data);
-
+    
       // Store tokens (optional, for future authentication)
-      localStorage.setItem("accessToken", data.AuthenticationResult.AccessToken);
+      /*localStorage.setItem("accessToken", data.AuthenticationResult.AccessToken);
       localStorage.setItem("idToken", data.AuthenticationResult.IdToken);
-      localStorage.setItem("refreshToken", data.AuthenticationResult.RefreshToken);
+      localStorage.setItem("refreshToken", data.AuthenticationResult.RefreshToken);*/
+      window.postMessage({
+        type: "SEND_JWT",
+        token: data.AuthenticationResult.IdToken
+      }, "*");
+
+      //window.sendMessage()({accessToken: data.AuthenticationResult.AccessToken})
+
+      //window.postMessage({type : "FROM_PAGE", text : `${data.AuthenticationResult.AccessToken}`}, "*");
+      
 
       // Redirect to personal page
       router.push("/personal");
