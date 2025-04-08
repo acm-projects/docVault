@@ -7,8 +7,6 @@ import NavbarSearch from "@/components/NavbarSearch";
 import Personal from "./personal/page";
 import School from "./school/page";
 import Work from "./work/page";
-import Chatbot from "./chatbot/page";
-import ScrollToTopButton from "@/components/ui/ScrollToTopButton";
 import { UserProvider } from "@/context/UserContext";
 import NewFile from "./newFile/page";
 
@@ -22,7 +20,6 @@ export default function RootLayout({ }: Readonly<{ children: React.ReactNode;}>)
     <UserProvider>
       <html lang="en">
         <body className="flex flex-col min-h-screen">
-        <ScrollToTopButton />
         <SidebarProvider>
             <AppSidebar />
             <div className="flex flex-col flex-1">
@@ -32,7 +29,6 @@ export default function RootLayout({ }: Readonly<{ children: React.ReactNode;}>)
               </header>
 
               <main className="flex-1 p-4">
-                <Chatbot />
                 <NewFile />
                 <section id="personal"><Personal /></section>
                 <section id="school"><School /></section>
