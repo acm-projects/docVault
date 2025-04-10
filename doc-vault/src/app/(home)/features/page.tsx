@@ -41,7 +41,7 @@ const Features = () => {
         <div className="p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-10">
           {features.map((feature) => (
             <div key={feature.caption}>
-              <Image width={600} height={400} alt={feature.caption} src={feature.img} className="w-50 h-50 rounded-md"/>
+              <Image width={600} height={400} unoptimized alt={feature.caption} src={feature.img} className="w-50 h-50 rounded-md"/>
               <p className="py-5 font-normal">{feature.caption}</p>
             </div>
           ))}
