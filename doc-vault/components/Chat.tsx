@@ -8,6 +8,7 @@ const Chat = () => {
         {text: 'Hello, how can I help you today?', user:false}
     ]);
     const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false)
     
     
     const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -18,36 +19,34 @@ const Chat = () => {
     
     function handleMessage() {
         setMessage('')
+        setMessages([...messages, {text:message, user:true}])
+        setLoading(true)
         send(message)
-        setMessages([...messages, {text: message, user: true}])
     }
-
-    function recieve() {
-        useEffect(() => {
-            fetch("http://localhost:8080/chat")
-              .then((response) => response.json())
-              .then((data) => {
-                console.log(data)
-              });
-          }, []);
-        }
     
+    async function send(s: string) {
+        const response = await fetch('http://localhost:8080/chat', {
+            mode: 'cors',
+            method: 'POST',
+            body: JSON.stringify({"query": s}),
+            headers: {
+                'Content-type':'application/json',
+            }
+        }).then(response => response.json()).then(data => {
+            setLoading(false)
+            setMessages([...messages, {text: s, user:true}, {text:data.POST, user:false}])
+        })
+    }
     
-        async function send(s: string) {
-            const response = await fetch('http://localhost:8080/chat', {
-                mode: 'cors',
-                method: 'POST',
-                body: JSON.stringify({"query": s}),
-                headers: {
-                    'Content-type':'application/json',
-                }
-            })
-        }    
+    const messagesEnd = useRef<null | HTMLDivElement>(null);
+    useEffect(() => {
+    messagesEnd.current?.scrollIntoView({behavior: "smooth"})
+    }, [messages])
 
   return (
     <Accordion type='single' collapsible className='relative bg-white shadow'>
         <AccordionItem value='item-1'>
-            <div className='fixed w-80 right-10 bottom-10 border-red overflow:hidden overflow-y-auto bg-white'>
+            <div className='fixed w-80 right-10 bottom-10 border-red overflow:hidden bg-white'>
                 <AccordionTrigger className='px-6 border-2 border-red rounded-md text-darkblue'>
                     <div className='text-sm bg-white'>
                         Chat with docVault
@@ -61,6 +60,13 @@ const Chat = () => {
                                     {message.text}
                                 </div>
                             ))}
+                            {loading && (<div className='flex space-x-1 justify-center items-center bg-gray'>
+                                <span className='sr-only'>Loading...</span>
+                                <div className='h-2 w-2 bg-white rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+                                <div className='h-2 w-2 bg-white rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+                                <div className='h-2 w-2 bg-white rounded-full animate-bounce'></div>
+                            </div>)}
+                            <div ref={messagesEnd}/>
                         </div>
                         <div className='px-2 pb-2'>
                             <input

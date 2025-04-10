@@ -7,59 +7,55 @@ export default function Signup() {
 
   return (
     <>
-      <div className="text-darkblue max-container padding-container pb-40 flex flex-col justify-center mt-8">
-        <div style={{ minWidth: "30%" }}>
-          <div className="flex min-h-full shadow-lg flex-1 flex-col justify-center 
-          px-6 py-12 lg:px-8 bg-lightergray">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-              <h2 className="mt-1 text-center text-2xl font-bold leading-9 
-              tracking-tight">
-                Create a new account
-              </h2>
+      <div className="text-darkblue max-container padding-container my-8 mb-20">
+            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-lg md:max-w-2xl">
+                <div className="pt-5 pb-10">
+                    <h1 className="text-5xl font-bold text-lighterred">Sign Up</h1>
+                </div>
+              <form className="space-y-6" action="#" method="POST">
+              <div className="flex flex-row gap-6 w-full"> 
+            <div className="w-1/2">
+              <label
+                htmlFor="firstName"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                First Name <sup className="text-lg text-red"> *</sup>
+              </label>
+              <div className="mt-2">
+                <input
+                  id="firstName"
+                  name="firstName"
+                  type="name"
+                  placeholder="First Name"
+                  autoComplete="firstName"
+                  required
+                  className="border border-middlegray block w-full rounded-md py-1.5 px-3 text-gray-900 
+                            shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                  />
+              </div>
             </div>
 
-            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-              <form className="space-y-6" action="#" method="POST">
-              <div>
-                <label
-                  htmlFor="first-name"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  First Name <sup className="text-lg text-red"> *</sup>
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="first-name"
-                    name="first-name"
-                    type="text"
-                    placeholder="First Name"
-                    autoComplete="first-name"
-                    required
-                    className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 
-                    shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
+            <div className="w-1/2">
+              <label
+                htmlFor="lastName"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Last Name <sup className="text-lg text-red"> *</sup>
+              </label>
+              <div className="mt-2">
+                <input
+                  id="lastName"
+                  name="lastName"
+                  type="name"
+                  placeholder="Last Name"
+                  autoComplete="lastName"
+                  required
+                  className="border border-middlegray block w-full rounded-md py-1.5 px-3 text-gray-900 
+                            shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
                   />
-                </div>
               </div>
-
-              <div>
-                <label
-                  htmlFor="last-name"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Last Name
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="last-name"
-                    name="last-name"
-                    type="text"
-                    placeholder="Last Name"
-                    autoComplete="last-name"
-                    className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 
-                    shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
+            </div>
+          </div> 
                       
               <div>
                 <label
@@ -76,8 +72,8 @@ export default function Signup() {
                     placeholder="Email address"
                     autoComplete="email"
                     required
-                    className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 
-                    shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                    className="border border-middlegray block w-full rounded-md py-1.5 px-3 text-gray-900 
+                            shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
@@ -99,8 +95,8 @@ export default function Signup() {
                       placeholder="Password"
                       autoComplete="current-password"
                       required
-                      className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 
-                      shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      className="border border-middlegray block w-full rounded-md py-1.5 px-3 text-gray-900 
+                            shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
@@ -122,8 +118,8 @@ export default function Signup() {
                       placeholder="Confirm Password"
                       autoComplete="current-password"
                       required
-                      className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 
-                      shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                      className="border border-middlegray block w-full rounded-md py-1.5 px-3 text-gray-900 
+                            shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
@@ -163,8 +159,6 @@ export default function Signup() {
               </p>
             </div>
           </div>
-        </div>
-      </div>
     </>
   );
 }

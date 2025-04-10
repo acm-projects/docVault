@@ -13,11 +13,11 @@ from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 import numpy as np
 
+load_dotenv()
 
 '''env variables'''
-openai.api_key = os.environ["OPENAI_API_KEY"] = ''
-os.environ["PINECONE_API_KEY"] = ''
-   
+openai.api_key = os.environ["OPENAI_API_KEY"] = os.getenv('GPT_API_KEY')
+os.environ["PINECONE_API_KEY"] =  os.getenv('PINECONE_KEY')
 
 
 '''pinecone and openai setup'''
@@ -30,7 +30,7 @@ retriever = vector_store.as_retriever(search_kwargs={'k':1})
 llm = ChatOpenAI(model="gpt-4o-mini", openai_api_key=openai.api_key, temperature=0.7)
 prompt_template = PromptTemplate(
     template="""
-    Use the following context to answer the question as accurately as possible using only the context provided. If you are not sure or don't know, say 'I'm sorry, I don't know':
+    Use the following context to answer the question as accurately as possible using only the context provided succintly. If you are not sure or don't know, say 'Sorry, I don't understand. Please ask again with more detail.':
     Context: {context}
     Question: {question}
     Answer:""",
@@ -38,47 +38,26 @@ prompt_template = PromptTemplate(
 )
 llm_chain = prompt_template | llm | StrOutputParser()
 
+def query(q):
+    docs = vector_store.similarity_search(query=q, k=1)
+    '''retriever.invoke(query)'''
+    for doc in docs:
+        print(doc.page_content)
+    context = "\n\n".join([doc.page_content for doc in docs])
+    answer = llm_chain.invoke({"context": context, "question": q})
+    return answer
 
 '''flask setup'''
 app = Flask(__name__)
-CORS(app)
-@app.route('/chat', methods=['GET', 'POST'])
-def response():
-    if request.method == 'GET':
-        str = "hello"
-        response = jsonify({
-            "GET": str
-        })
-        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-        response.headers['Pragma'] = 'no-cache'
-        response.headers['Expires'] = '0'
-        return response
-    elif request.method == 'POST':
-        data = request.get_json()
-        str = data['query']
-        print(str)
-        response = jsonify({
-            "POST": str
-        })
-        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-        response.headers['Pragma'] = 'no-cache'
-        response.headers['Expires'] = '0'
-        return response
-    else:
-        return jsonify({
-            "ERROR": "err"
-        })
+CORS(app) 
+@app.route('/chat', methods=['POST'])
+def post_response():
+    data = request.get_json()
+    str = query(data['query'])
+    return jsonify({
+        "POST": str
+    })    
 
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)
-
-
-def query(q):
-    docs = vector_store.similarity_search(query=q, k=1)
-    '''retriever.invoke(query)
-    for doc in docs:
-        print(doc.page_content)'''
-    context = "\n\n".join([doc.page_content for doc in docs])
-    answer = llm_chain.invoke({"context": context, "question": query})
-    return answer

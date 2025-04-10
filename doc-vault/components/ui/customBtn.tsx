@@ -1,12 +1,11 @@
 type ButtonProps = {
     type: 'button' | 'submit';
     title: string;
-    icon?: string;
     variant: string;
     full?: boolean;
   }
   
-  const CustomBtn = ({ type, title, icon, variant, full }: ButtonProps) => {
+  const CustomBtn = ({ type, title, variant, full }: ButtonProps) => {
     return (
       <button
       className={`transition-all hover:font-bold flexCenter rounded-2xl border ${variant} ${full && 'w-full'}`}

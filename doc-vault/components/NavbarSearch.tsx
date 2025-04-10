@@ -5,10 +5,9 @@ import { ChevronDown, CircleUserRound, Search } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Button } from './ui/Button';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useUser } from '@/context/UserContext';
 
-const userInfo = [
-  { name: "Your Name", icon: <CircleUserRound size={50}/> },
-];
+const icon = <CircleUserRound size={50}/>;
 
 const NavbarAcc = () => {
     
@@ -20,19 +19,21 @@ const NavbarAcc = () => {
         const params = new URLSearchParams(searchParams);
         if (searchTerm) 
         {
-            params.set("query", searchTerm);
+            params.set("navQuery", searchTerm);
         }
 
         else 
         {
-            params.delete("query");
+            params.delete("navQuery");
         }
 
         replace(`${pathname}?${params.toString()}`);
     };
 
+    const { firstName, lastName } = useUser();
+
   return (
-    <nav className="text-darkblue w-full relative py-5">
+    <nav className="text-darkblue w-full relative p-10">
       <div className="flexCenter padding-container">
 
         <div className="flex-1 flex">
@@ -40,7 +41,7 @@ const NavbarAcc = () => {
                 <input
                     placeholder="Search"
                     className="peer block w-full rounded-lg py-[9px] pl-10 text-sm outline-2 bg-lightergray placeholder:text-darkblue"
-                    defaultValue={searchParams.get("query")?.toString()}
+                    defaultValue={searchParams.get("navQuery")?.toString()}
                     onChange={(e) => {
                         handleSearch(e.target.value);
                     }}
@@ -55,9 +56,9 @@ const NavbarAcc = () => {
                     <div className="flexCenter ml-20">
                     <Button className="text-darkblue bg-white shadow-none font-light text-lg transition-all hover:font-bold hover:bg-white">
                         <ChevronDown className="ml-2" />
-                        <span>{userInfo[0].name}</span>
+                        <span>{firstName} {lastName}</span>
                     </Button>
-                    <span>{userInfo[0].icon}</span>
+                    <span>{icon}</span>
                     </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent

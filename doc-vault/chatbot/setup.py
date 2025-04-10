@@ -5,15 +5,16 @@ from pinecone import Pinecone
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
 import numpy as np
-
-pc = Pinecone('')
+import os
+load_dotenv()
+pc = Pinecone(os.getenv('PINECONE_KEY'))
 index_name = 'docvault'
 index = pc.Index(index_name)
 
 embeddings = HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2')
 
 '''Add the path to your pdf file'''
-pdf_path = "c:/Users/nichr/OneDrive/Documents/docVault/doc-vault/src/app/(home)/chat/sample.pdf"
+pdf_path = "c:/Users/nichr/Downloads/vsu.pdf"
 reader = PdfReader(pdf_path)
 
 raw_text = ''
@@ -34,7 +35,7 @@ query_embedding = embeddings.embed_query(raw_text)
 query_embedding = np.array(query_embedding, dtype=np.float32)
 query_embedding = query_embedding.tolist()
 list = []
-metadata = {"content": raw_text}
-list.append(("vector 1", query_embedding, metadata))
+metadata = {"text": raw_text}
+list.append(("vector 5", query_embedding, metadata))
 index.upsert(list)
 
