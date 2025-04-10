@@ -3,16 +3,18 @@
 import { FileTable } from "@/components/FileTable";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Toggle } from "@/components/ui/toggle";
-import { CornerDownRight, Filter, FolderClosed, X } from "lucide-react";
+import { ChevronDown, Filter, FolderClosed, X } from "lucide-react";
 import React, { useState } from "react";
 import Modal from "react-modal";
 import { motion } from "framer-motion";
 
 const folders = [
-  { name: "Personal Documents", body: "This is a folder for personal documents." },
-  { name: "Legal Documents", body: "This is a folder for legal documents." },
-  { name: "Property Information", body: "This is a folder for property documents." },
-  { name: "Other Documents", body: "This is a folder for other documents." },
+  { name: "Finances", body: "Financial documents like statements or budgets.", color: "text-orange-600", subfolders: ["Bank Statements", "Bills", "Tax Documents", "Budget & Planning"] },
+  { name: "Health", body: "This is a folder for medical documents.", color: "text-blue-500", subfolders: ["Medical Records", "Insurance", "Prescriptions", "Appointments"] },
+  { name: "Identification", body: "This is a folder for identification.", color: "text-red", subfolders: ["Driver License", "Passport", "Birth Certificate", "Social Security"] },
+  { name: "Travel", body: "This is a folder for travel documents.", color: "text-yellow-600", subfolders: ["Iterneraries", "Bookings", "Travel Insurance", "Visa Documents"] },
+  { name: "Property", body: "This is a folder for property documents.", color: "text-green-600", subfolders: ["Lease Agreements", "Utility Bills", "Maintainance Records"] },
+  { name: "Other Documents", body: "This is a folder for other miscellaneous documents.", color: "text-blue-900", subfolders: ["Receipts", "Warranties", "Personal Projects", "Letters"] },
 ];
 
 const Personal = () => {
@@ -122,16 +124,37 @@ const Personal = () => {
           <Accordion type="single" collapsible>
             {folders.map((folder) => (
               <AccordionItem key={folder.name} className="my-5 p-5 border-darkblue border bg-gray-400 rounded-md" value={folder.name}>
-                <div className="flex gap-5">
-                  <FolderClosed className="text-slate-700" strokeWidth={1} size={90} />
-                  <div>
-                    <h2 className="text-xl">{folder.name}</h2>
-                    <p className="py-2 font-light">{folder.body}</p>
-                    <AccordionTrigger></AccordionTrigger>
+                <AccordionTrigger>
+                  <div className="flex gap-5 w-full">
+                    <FolderClosed className={folder.color} strokeWidth={1} size={90} />
+                    <div>
+                      <h2 className="text-xl">{folder.name}</h2>
+                      <p className="py-2 font-light">{folder.body}</p>
+                    </div>
+                    
                   </div>
-                </div>
+                  <ChevronDown />
+                </AccordionTrigger>
                 <AccordionContent className="flex py-5 pl-2">
-                  <FileTable files={files} onFileSelect={handleFileSelect} addNewFile={addNewFile}/>
+                  <Accordion className="w-full" type="single" collapsible>
+                    {folder.subfolders.map((sub) => (
+                      <AccordionItem key={sub} className="my-5 p-5 border-darkblue border bg-gray-400 rounded-md" value={sub} >
+                        <AccordionTrigger>
+                        <div className="flex items-center justify-between w-full">
+                          <h2 className="text-xl">{sub}</h2>
+                          <ChevronDown />
+                        </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="flex py-5 pl-2">
+                          <FileTable
+                            files={files}
+                            onFileSelect={handleFileSelect}
+                            addNewFile={addNewFile}
+                          />
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
                 </AccordionContent>
               </AccordionItem>
             ))}

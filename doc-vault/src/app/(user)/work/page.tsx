@@ -3,7 +3,7 @@
 import { FileTable } from '@/components/FileTable'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Toggle } from '@/components/ui/toggle'
-import { CornerDownRight, Filter, FolderClosed, X } from 'lucide-react'
+import { ChevronDown, Filter, FolderClosed, X } from 'lucide-react'
 import React, { useState } from 'react'
 import Modal from "react-modal";
 import { motion } from "framer-motion";
@@ -12,18 +12,26 @@ const folders = [
   {
     name: "Acme Corporation",
     body: "User-Friendly Global Functionalities",
+    color: "text-blue-600", 
+    subfolders: ["Projects", "Finance", "Human Resources", "Legal", "Marketing"]
   },
   {
     name: "Green Ltd",
     body: "Front-Line Composite Open architecture",
+    color: "text-yellow-600", 
+    subfolders: ["Contracts & Agreements", "Projects", "Research & Development", "Sales"]
   },
   {
     name: "Hammes, Volkman and Bechtelar",
     body: "Face to face Human-Resource Focus group",
+    color: "text-red", 
+    subfolders: ["Client Relations", "Projects", "Administrative", "Human Resources", "Legal"]
   },
   {
     name: "Emmerich LLC",
     body: "Enhanced Grid-Enabled Workforce",
+    color: "text-green-600", 
+    subfolders: ["Contracts & Agreements", "Research & Development", "Finance", "Human Resources", "Legal", "Marketing"]
   },
 ]
 
@@ -133,16 +141,37 @@ const Work = () => {
           <Accordion type="single" collapsible>
             {folders.map((folder) => (
               <AccordionItem key={folder.name} className="my-5 p-5 border-darkblue border bg-gray-400 rounded-md" value={folder.name}>
-                <div className='flex gap-5'>
-                  <FolderClosed className="text-slate-700" strokeWidth={1} size={90}/>
+                <AccordionTrigger>
+                  <div className="flex gap-5 w-full">
+                    <FolderClosed className={folder.color} strokeWidth={1} size={90} />
                     <div>
                       <h2 className="text-xl">{folder.name}</h2>
                       <p className="py-2 font-light">{folder.body}</p>
-                      <AccordionTrigger></AccordionTrigger>
                     </div>
-                </div>
-                <AccordionContent className='flex py-5 pl-2'>
-                  <FileTable files={files} onFileSelect={handleFileSelect} addNewFile={addNewFile}/>
+                    
+                  </div>
+                  <ChevronDown />
+                </AccordionTrigger>
+                <AccordionContent className="flex py-5 pl-2">
+                  <Accordion className="w-full" type="single" collapsible>
+                    {folder.subfolders.map((sub) => (
+                      <AccordionItem key={sub} className="my-5 p-5 border-darkblue border bg-gray-400 rounded-md" value={sub} >
+                        <AccordionTrigger>
+                        <div className="flex items-center justify-between w-full">
+                          <h2 className="text-xl">{sub}</h2>
+                          <ChevronDown />
+                        </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="flex py-5 pl-2">
+                          <FileTable
+                            files={files}
+                            onFileSelect={handleFileSelect}
+                            addNewFile={addNewFile}
+                          />
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
                 </AccordionContent>
               </AccordionItem>
             ))}
