@@ -10,6 +10,7 @@ import Work from "./work/page";
 import { UserProvider } from "@/context/UserContext";
 import NewFile from "./newFile/page";
 import { Menu } from "lucide-react";
+import Chat from "@/components/Chat"
 
 export const metadata: Metadata = {
   title: "docVault",
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ }: Readonly<{ children: React.ReactNode;}>) {
   return (
     <UserProvider>
+      <Chat/>
       <html lang="en">
         <body className="flex flex-col min-h-screen">
         <SidebarProvider>

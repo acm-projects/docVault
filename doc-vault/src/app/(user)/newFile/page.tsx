@@ -1,6 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/Button"
+
 import React, { DragEvent, useState } from "react";
 
 const NewFile = () => {

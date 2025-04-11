@@ -10,7 +10,7 @@ import {
     TableRow,
   } from "@/components/ui/table"
 import { CirclePlus } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "./ui/Button";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
    
