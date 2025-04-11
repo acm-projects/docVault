@@ -76,6 +76,12 @@ const School = () => {
       color: "text-yellow-600", 
       subfolders: ["Notes", "Homework", "Exams & Quizzes", "Projects", "Class Info"]
     },
+    {
+      name: "Academic Records",
+      body: "Contains important records like transcripts and enrollment documents.",
+      color: "text-blue-900", 
+      subfolders: ["Transcripts", "Resumes", "Letters of Recommendation", "Certificates", "Test Scores (SAT, GRE, etc.)", "Enrollment Documents"]
+    },
   ]
   
   const [files, setFiles] = useState([
