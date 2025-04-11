@@ -9,6 +9,7 @@ import School from "./school/page";
 import Work from "./work/page";
 import { UserProvider } from "@/context/UserContext";
 import NewFile from "./newFile/page";
+import { Menu } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "docVault",
@@ -24,7 +25,7 @@ export default function RootLayout({ }: Readonly<{ children: React.ReactNode;}>)
             <AppSidebar />
             <div className="flex flex-col flex-1">
               <header className="flex items-center gap-2 bg-white p-4 w-full">
-                <SidebarTrigger />
+                <SidebarTrigger className="bg-white"><Menu className="text-darkblue" size={32}/></SidebarTrigger>
                 <NavbarSearch />
               </header>
 

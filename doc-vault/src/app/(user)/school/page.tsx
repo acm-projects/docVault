@@ -8,8 +8,6 @@ import { ChevronDown, Filter, FolderClosed, X } from 'lucide-react'
 import React, { useState } from 'react'
 import Modal from "react-modal";
 import { motion } from "framer-motion";
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 
