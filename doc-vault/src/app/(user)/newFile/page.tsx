@@ -62,11 +62,11 @@ const NewFile = () => {
   
     return (
     <section id="newFile">
-      <div className="text-darkblue max-container padding-container mb-10 mt-8 p-5 shadow-">
+      <div className="text-darkblue max-container padding-container mb-10 mt-8 p-5">
         <h1 className="p-8 text-4xl font-bold text-lighterred">Add a file</h1>
         <form onSubmit={handleSubmit}>
             <div className="p-4 flex items-center justify-center w-full">
-                <label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-1/2 h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 ${dragOver ? "bg-middlegray" : "bg-white"}`}>
+                <label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-1/2 h-64 shadow-lg p-10 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 ${dragOver ? "bg-middlegray" : "bg-white"}`}>
                     <div 
                         className="flex flex-col items-center justify-center pt-5 pb-6"
                         onDragOver={handleDragOver}
