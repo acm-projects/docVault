@@ -8,6 +8,9 @@ import { ChevronDown, Filter, FolderClosed, X } from 'lucide-react'
 import React, { useState } from 'react'
 import Modal from "react-modal";
 import { motion } from "framer-motion";
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 
 const School = () => {
@@ -168,104 +171,110 @@ const School = () => {
   };
 
   return (
-    <div className="min-h-screen text-darkblue max-container padding-container mt-8">
-        <div className="p-4">
-          <h1 className="py-5 text-4xl font-bold text-lighterred">School</h1>
-        </div>
-
-        <div className="p-4 py-5">
-          <DueDateTable files={hwFiles} addNewHwFile={addNewHwFile} />
-        </div>
-
-        <div className="p-4 py-5">
-          <div className="flex justify-end text-darkblue gap-2 mt-10">
-            <Toggle variant="outline" aria-label="Toggle created date">Created</Toggle>
-            <Toggle variant="outline" aria-label="Toggle modified date">Modified</Toggle>
-            <Toggle variant="outline" aria-label="Toggle tag">Tag</Toggle>
-            <Toggle variant="outline" aria-label="Toggle type">Type</Toggle>
-            <Filter className="mx-3" size={32} />
-          </div>
-              
-          <Accordion type="single" collapsible>
-            {folders.map((folder) => (
-              <AccordionItem key={folder.name} className="my-5 p-5 border-darkblue border bg-gray-400 rounded-md" value={folder.name}>
-                <AccordionTrigger>
-                  <div className="flex gap-5 w-full">
-                    <FolderClosed className={folder.color} strokeWidth={1} size={90} />
-                    <div>
-                      <h2 className="text-xl">{folder.name}</h2>
-                      <p className="py-2 font-light">{folder.body}</p>
-                    </div>
-                    
-                  </div>
-                  <ChevronDown />
-                </AccordionTrigger>
-                <AccordionContent className="flex py-5 pl-2">
-                  <Accordion className="w-full" type="single" collapsible>
-                    {folder.subfolders.map((sub) => (
-                      <AccordionItem key={sub} className="my-5 p-5 border-darkblue border bg-gray-400 rounded-md" value={sub} >
-                        <AccordionTrigger>
-                        <div className="flex items-center justify-between w-full">
-                          <h2 className="text-xl">{sub}</h2>
-                          <ChevronDown />
-                        </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="flex py-5 pl-2">
-                          <FileTable
-                            files={files}
-                            onFileSelect={handleFileSelect}
-                            addNewFile={addNewFile}
-                          />
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
-                  </Accordion>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-
-          <Modal 
-            ariaHideApp={false} 
-            isOpen={isModalOpen} 
-            onRequestClose={() => setIsModalOpen(false)} 
-            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-          >
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.7, ease: "easeInOut" }}
-              className="w-full max-w-4xl"
-            >
-            <div className="relative bg-white p-6 rounded-lg shadow-lg w-full">
-              <button onClick={() => setIsModalOpen(false)} className="absolute top-3 right-3 text-gray-600 hover:text-gray-900">
-                <X size={24} />
-              </button>
-
-              {selectedFile && (
-                <>
-                  <h2 className="text-lg font-semibold mb-4">{selectedFile.name}</h2>
-                  <div className="w-full h-[800px]">
-                    {selectedFile.type === ".pdf" ? (
-                      <iframe src={selectedFile.path} className="w-full h-full" />
-                    ) : selectedFile.type === ".jpeg" || selectedFile.type === ".png" ? (
-                      <img src={selectedFile.path} className="w-full h-full" alt={selectedFile.name} />
-                    ) : selectedFile.type === ".docx" ? (
-                      <iframe src={`https://docs.google.com/gview?url=${window.location.origin}${selectedFile.path}&embedded=true`} className="w-full h-full" />
-                    ) : selectedFile.type === ".txt" ? (
-                      <pre className="p-4 rounded-md">{fileContent}</pre>
-                    ) : (
-                      <p className="text-center">File preview not available</p>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
-            </motion.div>
-          </Modal>
-        </div>
+    <div className="min-h-full text-darkblue max-container padding-container mt-8">
+      <div className="p-10">
+        <h1 className="py-5 text-4xl font-bold text-lighterred">School</h1>
       </div>
+
+       <Tabs defaultValue="to-do" className="px-10 w-full">
+        <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="to-do">To Do</TabsTrigger>
+            <TabsTrigger value="classes">Classes</TabsTrigger>
+        </TabsList>
+        <TabsContent value="to-do">
+          <DueDateTable files={hwFiles} addNewHwFile={addNewHwFile} />
+        </TabsContent>
+        <TabsContent value="classes">
+              <div className="mt-5 pb-5">
+                <div className="flex justify-end text-darkblue gap-2 mt-10">
+                  <Toggle variant="outline" aria-label="Toggle created date">Created</Toggle>
+                  <Toggle variant="outline" aria-label="Toggle modified date">Modified</Toggle>
+                  <Toggle variant="outline" aria-label="Toggle tag">Tag</Toggle>
+                  <Toggle variant="outline" aria-label="Toggle type">Type</Toggle>
+                  <Filter className="mx-3" size={32} />
+                </div>
+                            
+              <Accordion type="single" collapsible>
+                {folders.map((folder) => (
+                  <AccordionItem key={folder.name} className="my-5 p-5 border-darkblue border bg-gray-400 rounded-md" value={folder.name}>
+                    <AccordionTrigger>
+                      <div className="flex gap-5 w-full">
+                        <FolderClosed className={folder.color} strokeWidth={1} size={90} />
+                        <div>
+                          <h2 className="text-xl">{folder.name}</h2>
+                          <p className="py-2 font-light">{folder.body}</p>
+                        </div>     
+                      </div>
+                      <ChevronDown />
+                    </AccordionTrigger>
+                    <AccordionContent className="flex py-5 pl-2">
+                      <Accordion className="w-full" type="single" collapsible>
+                        {folder.subfolders.map((sub) => (
+                          <AccordionItem key={sub} className="my-5 p-5 border-darkblue border bg-gray-400 rounded-md" value={sub} >
+                            <AccordionTrigger>
+                              <div className="flex items-center justify-between w-full">
+                                <h2 className="text-xl">{sub}</h2>
+                                <ChevronDown />
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="flex py-5 pl-2">
+                              <FileTable
+                                files={files}
+                                onFileSelect={handleFileSelect}
+                                addNewFile={addNewFile}
+                              />
+                            </AccordionContent>
+                          </AccordionItem>
+                        ))}
+                      </Accordion>
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+
+              <Modal 
+                ariaHideApp={false} 
+                isOpen={isModalOpen} 
+                onRequestClose={() => setIsModalOpen(false)} 
+                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+                >
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.7, ease: "easeInOut" }}
+                    className="w-full max-w-4xl"
+                  >
+                    <div className="relative bg-white p-6 rounded-lg shadow-lg w-full">
+                      <button onClick={() => setIsModalOpen(false)} className="absolute top-3 right-3 text-gray-600 hover:text-gray-900">
+                          <X size={24} />
+                        </button>
+
+                      {selectedFile && (
+                        <>
+                          <h2 className="text-lg font-semibold mb-4">{selectedFile.name}</h2>
+                          <div className="w-full h-[800px]">
+                            {selectedFile.type === ".pdf" ? (
+                              <iframe src={selectedFile.path} className="w-full h-full" />
+                            ) : selectedFile.type === ".jpeg" || selectedFile.type === ".png" ? (
+                              <img src={selectedFile.path} className="w-full h-full" alt={selectedFile.name} />
+                            ) : selectedFile.type === ".docx" ? (
+                              <iframe src={`https://docs.google.com/gview?url=${window.location.origin}${selectedFile.path}&embedded=true`} className="w-full h-full" />
+                            ) : selectedFile.type === ".txt" ? (
+                              <pre className="p-4 rounded-md">{fileContent}</pre>
+                            ) : (
+                              <p className="text-center">File preview not available</p>
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </motion.div>
+                </Modal>
+              </div>
+        </TabsContent>
+      </Tabs>
+    </div>
   )
 }
 
