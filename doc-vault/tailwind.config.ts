@@ -12,8 +12,8 @@ export default {
   	important: true,
   	extend: {
   		colors: {
-  			red: '#D90429',
-  			lighterred: '#EF233C',
+  			red: '#CE1212',
+  			lighterred: '#eb1e1e',
   			lightergray: '#EDF2F4',
 			middlegray: "#D9D9D9",
   			gray: '#8D99AE',

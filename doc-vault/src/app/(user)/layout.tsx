@@ -20,9 +20,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ }: Readonly<{ children: React.ReactNode;}>) {
   return (
     <UserProvider>
-      <Chat/>
       <html lang="en">
         <body className="flex flex-col min-h-screen">
+        <Chat/>
         <SidebarProvider>
             <AppSidebar />
             <div className="flex flex-col flex-1">

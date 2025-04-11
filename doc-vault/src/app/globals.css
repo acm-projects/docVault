@@ -167,14 +167,14 @@ body {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
-    --sidebar-background: 348 96% 43%; /* Red (#D90429) */
+    --sidebar-background: 0, 84%, 44%; /* Red (#D90429) */
     --sidebar-foreground: 0 0% 100%; /* White */
-    --sidebar-primary: 348 83% 58%; /* Lighter red (#EF233C) */
-    --sidebar-primary-foreground: 0 0% 100%; /* White */
-    --sidebar-accent: 348 83% 58%; /* Lighter red for selection highlight */
+    --sidebar-primary: 0, 84%, 52%; /* Lighter red (#EF233C) */
+    --sidebar-primary-foreground: 0, 84%, 52%; /* White */
+    --sidebar-accent: 0, 84%, 52%; /* Lighter red for selection highlight */
     --sidebar-accent-foreground: 0 0% 100%; /* White */
     --sidebar-border: 348 96% 43%; /* Red */
-    --sidebar-ring: 348 83% 58%; /* Lighter red */
+    --sidebar-ring: 0, 84%, 52%; /* Lighter red */
   }
   .dark {
     --background: 0 0% 3.9%;
