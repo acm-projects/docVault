@@ -1,12 +1,11 @@
 import React from 'react';
-import {Button} from './ui/Button'
 import {Menu, CircleUserRound} from 'lucide-react';
 import Link from 'next/link';
 
 const extensionNav = () => {
     return (
-        <nav className="text-white bg-red py-4 px-2 flex flex-wrap items-center justify-between">
-            <div className="text-3xl font-semibold">
+        <nav className="text-white bg-red p-5 flex flex-wrap items-center justify-between">
+            <div className="text-2xl font-semibold">
                 docVault
             </div>
             <div className="flex flex-row space-x-5">

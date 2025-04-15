@@ -8,7 +8,7 @@ export default function RootLayout({
   }) {
     return (
       <html>
-        <body className="">
+        <body className="rounded-lg">
           <Navbar/>
           {children}
         </body>
