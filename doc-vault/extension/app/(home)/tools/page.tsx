@@ -4,9 +4,9 @@ import Link from "next/link";
 
 const success = () => {
     return (
-        <div className="text-darkblue text-lg py-4 flex flex-col justify-center items-center space-y-2">
-            <div className="text-2xl font-semibold py-4">
-            Tools
+        <div className="text-darkblue text-lg p-4 flex flex-col justify-center items-center space-y-2">
+            <div className="text-lg font-semibold py-4">
+                Tools
             </div>
             <CustomBtn 
                         type="submit"

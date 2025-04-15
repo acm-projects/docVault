@@ -17,8 +17,8 @@ html {
 body {
   font-family: "Lexend", serif;
   font-optical-sizing: auto;
-  min-width: 250px;
-  min-height: 350px;
+  min-width: 350px;
+  min-height: 400px;
 }
 
 @layer utilities {
