@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ }: Readonly<{ children: React.ReactNode;}>) {
   return (
     <UserProvider>
-      <Chat/>
+        <Chat/>
       <html lang="en">
         <body className="flex flex-col min-h-screen">
         <SidebarProvider>
@@ -29,7 +29,7 @@ export default function RootLayout({ }: Readonly<{ children: React.ReactNode;}>)
                 <SidebarTrigger />
                 <NavbarSearch />
               </header>
-
+              
               <main className="flex-1 p-4">
                 <NewFile />
                 <section id="personal"><Personal /></section>

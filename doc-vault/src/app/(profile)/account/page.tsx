@@ -1,6 +1,6 @@
 "use client"
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/Button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useUser } from '@/context/UserContext'
 import { ChevronDown, ChevronLeft, CircleUserRound } from 'lucide-react'

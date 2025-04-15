@@ -36,6 +36,6 @@ query_embedding = np.array(query_embedding, dtype=np.float32)
 query_embedding = query_embedding.tolist()
 list = []
 metadata = {"text": raw_text}
-list.append(("vector 5", query_embedding, metadata))
+list.append(("vector 4", query_embedding, metadata))
 index.upsert(list)
 

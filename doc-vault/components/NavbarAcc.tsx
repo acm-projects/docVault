@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 import { ChevronDown, CircleUserRound } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
-import { Button } from './ui/button';
+import { Button } from './ui/Button';
 import { useUser } from '@/context/UserContext';
 
 const icon = <CircleUserRound size={50} />;
