@@ -4,9 +4,18 @@ import { FileTable } from "@/components/FileTable";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Toggle } from "@/components/ui/toggle";
 import { ChevronDown, Filter, FolderClosed, X } from "lucide-react";
-import React, { useState } from "react";
 import Modal from "react-modal";
 import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+
+type FileItem = {
+  name: string;
+  path: string;
+  type: string;
+  tag: string;
+  created: string;
+  modified: string;
+};
 
 const folders = [
   { name: "Finances", body: "Financial documents like statements or budgets.", color: "text-orange-600", subfolders: ["Bank Statements", "Bills", "Tax Documents", "Budget & Planning"] },
@@ -18,68 +27,79 @@ const folders = [
 ];
 
 const Personal = () => {
+
+  if (typeof window !== "undefined") {
+    console.log("We are in the browser");
+  } else {
+    console.log(" Running on server (SSR)");
+  }
+  
   const [selectedFile, setSelectedFile] = useState<{ name: string; path?: string; type: string } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fileContent, setFileContent] = useState("");
 
-  const [files, setFiles] = useState([
-    {
-        name: "ExampleFile",
-        path: "./uploads/ExampleFile.txt",
-        type: ".txt",
-        tag: "Project 1",
-        created: "01/01/2025",
-        modified: "02/01/2025",
-    },
-    {
-        name: "ExampleFile1",
-        path: "./uploads/ExampleFile1.pdf",
-        type: ".pdf",
-        tag: "Project 1",
-        created: "01/10/2025",
-        modified: "09/01/2025",
-    },
-    {
-        name: "ExampleFile2",
-        path: "./uploads/ExampleFile2.jpeg",
-        type: ".jpeg",
-        tag: "Project 2",
-        created: "01/01/2024",
-        modified: "02/01/2025",
-    },
-    {
-        name: "ExampleFile3",
-        path: "./uploads/ExampleFile3.docx",
-        type: ".docx",
-        tag: "Project 3",
-        created: "01/01/2023",
-        modified: "02/01/2025",
-    },
-    {
-        name: "ExampleFile4",
-        path: "./uploads/ExampleFile4.pdf",
-        type: ".pdf",
-        tag: "Project 3",
-        created: "01/01/2022",
-        modified: "02/01/2022",
-    },
-    {
-        name: "ExampleFile5",
-        path: "./uploads/ExampleFile5.txt",
-        type: ".txt",
-        tag: "Project 1",
-        created: "01/01/2021",
-        modified: "02/01/2021",
-    },
-    {
-        name: "ExampleFile6",
-        path: "./uploads/ExampleFile6.jpeg",
-        type: ".jpeg",
-        tag: "Project 2",
-        created: "01/01/2021",
-        modified: "02/01/2021",
-    },
-  ]);
+  const [files, setFiles] = useState<FileItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    
+    const fetchFiles = async () => {
+      console.log(" fetchFiles() called");
+      try {
+        const idToken = sessionStorage.getItem("idToken");
+        console.log("ID TOKEN:", idToken);
+        
+  
+        if (!idToken) {
+          console.error("No ID token found in localStorage");
+          return;
+        }
+  
+        const res = await fetch("https://nnrmmjb013.execute-api.us-east-2.amazonaws.com/V3-Yes-Auth/GET-ALL-FILES", {
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+        });
+
+        console.log(" API response:", res);
+  
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`API Error: ${res.status} - ${text}`);
+        }
+  
+        const result = await res.json();
+        console.log(" Files from API:", result);
+        console.log("API result:", result);
+  
+        const s3BaseURL = "https://docvault-karthik.s3.amazonaws.com/";
+  
+        const mappedFiles: FileItem[] = result.files.map((key: string) => {
+          const cleanName = key.split("\\").pop()?.split("/").pop() || key;
+          const extension = cleanName.split(".").pop();
+          return {
+            name: cleanName,
+            path: s3BaseURL + encodeURIComponent(key),
+            type: `.${extension}`,
+            tag: "Auto",
+            created: "Unknown",
+            modified: "Unknown",
+          };
+        });
+  
+        setFiles(mappedFiles);
+        setLoading(false);
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setLoading(false);
+      }
+    };
+  
+    fetchFiles();
+  }, []);
+  
+  
+   
   
   const addNewFile = (newFile: any) => {
     setFiles((prevFiles) => [...prevFiles, newFile])
