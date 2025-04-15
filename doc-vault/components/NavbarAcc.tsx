@@ -3,15 +3,16 @@ import Link from 'next/link';
 import React from 'react';
 import { ChevronDown, CircleUserRound } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
-import { Button } from './ui/Button';
+import { Button } from './ui/button';
+import { useUser } from '@/context/UserContext';
 
-const userInfo = [
-  { name: "Your Name", icon: <CircleUserRound size={50}/> },
-];
+const icon = <CircleUserRound size={50} />;
 
 const NavbarAcc = () => {
+  const { firstName, lastName } = useUser();
+  
   return (
-    <nav className="text-darkblue relative py-5">
+    <nav className="text-darkblue relative p-10">
       <div className="mx-auto flexBetween padding-container">
         <Link className="text-3xl font-semibold" href="/">
           docVault
@@ -23,9 +24,9 @@ const NavbarAcc = () => {
                 <div className="flexCenter">
                 <Button className="text-darkblue bg-white shadow-none font-light text-lg hover:bg-white transition-all hover:font-bold">
                     <ChevronDown className="ml-auto" />
-                    <span>{userInfo[0].name}</span>
+                    <span>{firstName} {lastName}</span>
                 </Button>
-                <span>{userInfo[0].icon}</span>
+                <span>{icon}</span>
                 </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent

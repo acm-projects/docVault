@@ -24,11 +24,13 @@ const success = () => {
                         variant="btn_gray"
                     />
             <div className='py-3'>
+            <Link href='index.html'>
             <CustomBtn 
                         type="submit"
-                        title="Settings"
+                        title="Back"
                         variant="btn_red"
                     />
+            </Link>
             </div>
         </div>
     )

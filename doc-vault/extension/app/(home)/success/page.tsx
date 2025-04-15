@@ -4,13 +4,11 @@ import Link from "next/link";
 
 const success = () => {
     return (
-        <div className="text-darkblue text-lg py-4 flex flex-col justify-center items-center">
+        <div className="text-darkblue text-lg py-4 flex flex-col justify-center items-center text-center">
             <div className="text-2xl font-semibold py-4">
             Saved!
             </div>
-            <div className="justify-center">
                 Your document has been successfully saved and categorized. You can view it below.
-            </div>
             <div className="flex justify-center px-8 py-8 space-x-4">
                     <CustomBtn 
                         type="submit"
