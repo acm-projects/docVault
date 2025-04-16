@@ -42,6 +42,7 @@ const NewFile = () => {
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             const file = e.dataTransfer.files[0];
             console.log("Dropped file: ", file);
+            setFile(file);
         }
     }
 

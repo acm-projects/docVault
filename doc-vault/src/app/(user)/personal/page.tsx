@@ -105,26 +105,31 @@ const Personal = () => {
     setFiles((prevFiles) => [...prevFiles, newFile])
   }
 
-  const handleFileSelect = async (file: { name: string; path?: string; type: string }) => {
-    if (!file.path) {
-      alert("No file path available!");
-      return;
-    }
+  const handleFileSelect = async (file: { name: string; type: string }) => {
+    const idToken = sessionStorage.getItem("idToken");
+    if (!idToken) return alert("Missing token");
+  
+    try {
+      const res = await fetch(
+        `https://nnrmmjb013.execute-api.us-east-2.amazonaws.com/V3-Yes-Auth/GET?fileName=${encodeURIComponent(file.name)}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+        }
+      );
+  
+      const result = await res.json();
+      const presignedUrl = result.downloadUrl;
 
-    setSelectedFile(file);
-    setIsModalOpen(true);
-    setFileContent("");
-
-    if (file.type === ".txt") {
-      try {
-        const response = await fetch(file.path);
-        const text = await response.text();
-        setFileContent(text);
-      } 
-      
-      catch (error) {
-        setFileContent("Failed to load file.");
-      }
+      console.log("🔗 Presigned URL:", presignedUrl);
+  
+      setSelectedFile({ ...file, path: presignedUrl }); // update modal preview
+      setIsModalOpen(true);
+    } catch (err) {
+      console.error("Error fetching presigned URL:", err);
+      alert("Could not preview file.");
     }
   };
 
@@ -207,9 +212,9 @@ const Personal = () => {
                     ) : selectedFile.type === ".jpeg" || selectedFile.type === ".png" ? (
                       <img src={selectedFile.path} className="w-full h-full" alt={selectedFile.name} />
                     ) : selectedFile.type === ".docx" ? (
-                      <iframe src={`https://docs.google.com/gview?url=${window.location.origin}${selectedFile.path}&embedded=true`} className="w-full h-full" />
+                      <iframe src={`https://docs.google.com/gview?url=${selectedFile.path}&embedded=true`} />
                     ) : selectedFile.type === ".txt" ? (
-                      <pre className="p-4 rounded-md">{fileContent}</pre>
+                      <iframe src={selectedFile.path} className="w-full h-full" />
                     ) : (
                       <p className="text-center">File preview not available</p>
                     )}
