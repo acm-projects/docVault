@@ -9,7 +9,7 @@ const extensionNav = () => {
                 docVault
             </div>
             <div className="flex flex-row space-x-5">
-                <Link href="http://localhost:3000/account" target="_blank">
+                <Link href="account.html">
                     <CircleUserRound className="hover:stroke-2 stroke-1 transition-all" size={30}/>
                 </Link>
                 <Link href="tools.html">

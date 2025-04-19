@@ -89,8 +89,12 @@ const NewFile = () => {
                     />
                 </label>
             </div>
-            <div className="flex justify-center">
-                <Button type="submit" className="w-1/4">Save Changes</Button>
+            <div className="flex w-full justify-center p-4">
+                <div className="flex w-1/2 justify-center items-center gap-x-10">
+                    <Button type="submit" className="text-lg font-normal p-8 w-1/4">Save File</Button>
+                    <p className="flex font-light"> OR </p>
+                    <Button type="button" className="text-lg font-normal p-8 w-1/4">Translate</Button>
+                </div>
             </div>
         </form>
       </div>

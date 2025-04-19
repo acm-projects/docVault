@@ -1,18 +1,18 @@
 import type { Config } from "tailwindcss";
 
 export default {
-    darkMode: ["class"],
-    content: [
+  darkMode: ["class"],
+  content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
 	"./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-  	important: true,
-  	extend: {
-  		colors: {
-  			red: '#CE1212',
+	important: true,
+	extend: {
+		colors: {
+			red: '#CE1212',
   			lighterred: '#eb1e1e',
   			lightergray: '#EDF2F4',
 			middlegray: "#D9D9D9",
@@ -105,7 +105,8 @@ export default {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
-  	}
+	}
   },
   plugins: [require("tailwindcss-animate")],
+
 } satisfies Config;

@@ -3,15 +3,23 @@ type ButtonProps = {
     title: string;
     variant: string;
     full?: boolean;
+    children?: React.ReactNode;
   }
   
-  const CustomBtn = ({ type, title, variant, full }: ButtonProps) => {
+  const CustomBtn = ({ type, title, variant, full, children }: ButtonProps) => {
     return (
       <button
-      className={`transition-all hover:font-bold flexCenter rounded-2xl border ${variant} ${full && 'w-full'}`}
+      className={`transition-all hover:font-bold hover:stroke-2 flexCenter rounded-2xl border ${variant} ${full && 'w-full'}`}
         type={type}
       >
-        <label className="lg:px-5 whitespace-nowrap cursor-pointer">{title}</label>
+        {children && (
+          <span className="flex justify-left">
+            {children}
+          </span>
+        )}
+        <label className="mx-auto whitespace-nowrap cursor-pointer text-center">
+          {title}
+        </label>
       </button>
     )
   }

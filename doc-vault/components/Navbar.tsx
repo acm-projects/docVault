@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import CustomBtn from './ui/customBtn';
 import React from 'react';
+import Image from 'next/image';
 
 const NAV_LINKS = [
   { href: '/features', key: 'features', label: 'Features' },
@@ -12,9 +13,9 @@ const NAV_LINKS = [
 const Navbar = () => {
   return (
     <nav className="text-darkblue relative p-10">
-      <div className="mx-auto flexBetween padding-container">
-        <Link className="text-3xl font-semibold" href="/">
-          docVault
+      <div className="flexBetween padding-container">
+        <Link href="/">
+          <Image src="/LogoBlack.png" alt="docVault" height={100} width={200} />
         </Link>
 
         <ul className="gap-4 lg:gap-12 flex">

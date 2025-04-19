@@ -1,30 +1,101 @@
-import CustomBtn from '@/components/ui/customBtn'
-import Link from 'next/link'
-import React from 'react'
+"use client";
 
-const main = () => {
+import { Button } from "@/components/ui/Button"
+
+import React, { DragEvent, useState } from "react";
+
+const Main = () => {
+    const [dragOver, setDragOver] = useState(false);
+    const [dropped, setDropped] = useState(false);
+    const [file, setFile] = useState<File | null>(null);
+
+    const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setDragOver(true);
+    }
+
+    const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setDragOver(false);
+        setDropped(false);
+    }
+
+    const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setDragOver(false);
+        setDropped(true);
+
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            const file = e.dataTransfer.files[0];
+            console.log("Dropped file: ", file);
+        }
+    }
+
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+        e.preventDefault();
+
+        if (!file) {
+            alert("Please drop a file before submitting.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const response = await fetch("/api/upload", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) throw new Error("Upload failed");
+
+            const data = await response.json();
+            console.log("File uploaded successfully", data);
+            alert("File uploaded!");
+        } 
+        
+        catch (error) {
+            console.error("Error uploading file:", error);
+            alert("Upload failed.");
+        }
+    }
+  
     return (
-        <div className="text-darkblue text-lg p-4 flex flex-col justify-center items-center space-y-2">
-            <div className="text-lg font-semibold py-4">
-                Welcome to docVault!
+    <section id="newFile">
+      <div className="text-darkblue max-container padding-container mb-10 mt-8 p-5">
+        <form onSubmit={handleSubmit}>
+            <h1 className="py-4 text-lg flex justify-center">Welcome to docVault!</h1>
+            <div className="p-4 flex items-center justify-center w-full">
+                <label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-32 shadow-lg p-10 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 ${dragOver ? "bg-middlegray" : "bg-white"}`}>
+                    <div 
+                        className="flex flex-col items-center justify-center pt-5 pb-6"
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                    >
+                        <svg className="w-8 h-8 mb-4 text-darkblue" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                        </svg>
+                        <p className="mb-2 text-sm text-darkblue">{dropped ? "File uploaded!" : "Click to upload or drag and drop"}</p>
+                    </div>
+                    <input 
+                        id="dropzone-file" 
+                        type="file" 
+                        className="hidden" 
+                        onChange={(e) => {
+                            const file = e.target.files?.[0];
+                        }}
+                    />
+                </label>
             </div>
-            <CustomBtn 
-                type="submit"
-                title="Settings"
-                variant="btn_gray"
-            />
-            <CustomBtn 
-                type="submit"
-                title="Translate"
-                variant="btn_gray"
-            />
-            <CustomBtn 
-                type="submit"
-                title="Summarize"
-                variant="btn_gray"
-            />
-        </div>
-    )
-}
+            <div className="flex justify-center">
+                <Button type="submit" className="w-1/2">Save Changes</Button>
+            </div>
+        </form>
+      </div>
+    </section>
+  );
+};
 
-export default main
+export default Main;
