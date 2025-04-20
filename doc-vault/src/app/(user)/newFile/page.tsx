@@ -1,13 +1,27 @@
 "use client";
 
 import { Button } from "@/components/ui/Button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 import React, { DragEvent, useState } from "react";
+
+const languages = [
+    "English", "Spanish", "Spanish (Mexico)", "French", "French (Canada)", "Hindi", "German",
+    "Chinese (Simplified)", "Chinese (Traditional)", "Arabic", "Portuguese", "Portuguese (Portugal)", "Russian",
+    "Japanese", "Korean", "Afrikaans", "Albanian", "Amharic", "Armenian", "Azerbaijani", "Bengali", "Bosnian",
+    "Bulgarian", "Catalan", "Croatian", "Czech", "Danish", "Dari", "Dutch", "Estonian", "Finnish", "Georgian",
+    "Greek", "Gujarati", "Haitian Creole", "Hausa", "Hebrew", "Hungarian", "Icelandic", "Indonesian", "Irish",
+    "Italian", "Kannada", "Kazakh", "Latvian", "Lithuanian", "Macedonian", "Malay", "Malayalam", "Maltese",
+    "Mongolian", "Marathi", "Norwegian", "Farsi (Persian)", "Pashto", "Polish", "Punjabi", "Romanian", "Serbian",
+    "Sinhala", "Slovak", "Slovenian", "Somali", "Swahili", "Swedish", "Filipino Tagalog", "Tamil", "Telugu",
+    "Thai", "Turkish", "Ukrainian", "Urdu", "Uzbek", "Vietnamese", "Welsh",
+];
 
 const NewFile = () => {
     const [dragOver, setDragOver] = useState(false);
     const [dropped, setDropped] = useState(false);
     const [file, setFile] = useState<File | null>(null);
+    const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
 
     const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
         e.preventDefault();
@@ -60,6 +74,37 @@ const NewFile = () => {
             alert("Upload failed.");
         }
     }
+
+    const handleLanguageSelect = async (language: string) => {
+        if (!file) {
+          alert("Please upload a file before translating.");
+          return;
+        }
+      
+        setSelectedLanguage(language);
+      
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("language", language);
+      
+        try {
+          const response = await fetch("/api/translate", {
+            method: "POST",
+            body: formData,
+          });
+      
+          if (!response.ok) throw new Error("Translation failed");
+      
+          const data = await response.json();
+          console.log("Translation successful:", data);
+          alert(`File translated to ${language} successfully!`);
+        } 
+        
+        catch (error) {
+          console.error("Translation error:", error);
+          alert("Translation failed.");
+        }
+    };
   
     return (
     <section id="newFile">
@@ -84,8 +129,12 @@ const NewFile = () => {
                         type="file" 
                         className="hidden" 
                         onChange={(e) => {
-                            const file = e.target.files?.[0];
-                        }}
+                            const selectedFile = e.target.files?.[0];
+                            if (selectedFile) {
+                              setFile(selectedFile);
+                              setDropped(true);
+                            }
+                          }}
                     />
                 </label>
             </div>
@@ -93,7 +142,19 @@ const NewFile = () => {
                 <div className="flex w-1/2 justify-center items-center gap-x-10">
                     <Button type="submit" className="text-lg font-normal p-8 w-1/4">Save File</Button>
                     <p className="flex font-light"> OR </p>
-                    <Button type="button" className="text-lg font-normal p-8 w-1/4">Translate</Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button type="submit" className="text-lg font-normal p-8 w-1/4">Translate</Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuGroup className="p-2">Scroll for more languages</DropdownMenuGroup>
+                            {languages.map((lang) => (
+                                <DropdownMenuItem key={lang} onClick={() => handleLanguageSelect(lang)}>
+                                {lang}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
         </form>

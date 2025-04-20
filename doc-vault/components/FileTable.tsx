@@ -13,7 +13,8 @@ import { CirclePlus, MoreHorizontal, ScrollText, Trash2 } from "lucide-react";
 import { Button } from "./ui/Button";
 import { DragEvent, useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { DropdownMenuGroup, DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
    
 interface File {
     name: string;
@@ -30,9 +31,22 @@ interface FileTableProps {
     addNewFile: (newFile: File) => void;
 }
 
+const languages = [
+  "English", "Spanish", "Spanish (Mexico)", "French", "French (Canada)", "Hindi", "German",
+  "Chinese (Simplified)", "Chinese (Traditional)", "Arabic", "Portuguese", "Portuguese (Portugal)", "Russian",
+  "Japanese", "Korean", "Afrikaans", "Albanian", "Amharic", "Armenian", "Azerbaijani", "Bengali", "Bosnian",
+  "Bulgarian", "Catalan", "Croatian", "Czech", "Danish", "Dari", "Dutch", "Estonian", "Finnish", "Georgian",
+  "Greek", "Gujarati", "Haitian Creole", "Hausa", "Hebrew", "Hungarian", "Icelandic", "Indonesian", "Irish",
+  "Italian", "Kannada", "Kazakh", "Latvian", "Lithuanian", "Macedonian", "Malay", "Malayalam", "Maltese",
+  "Mongolian", "Marathi", "Norwegian", "Farsi (Persian)", "Pashto", "Polish", "Punjabi", "Romanian", "Serbian",
+  "Sinhala", "Slovak", "Slovenian", "Somali", "Swahili", "Swedish", "Filipino Tagalog", "Tamil", "Telugu",
+  "Thai", "Turkish", "Ukrainian", "Urdu", "Uzbek", "Vietnamese", "Welsh",
+];
+
 export function FileTable({ files, onFileSelect, addNewFile }: FileTableProps) {
   const [dragOver, setDragOver] = useState(false);
       const [dropped, setDropped] = useState(false);
+      const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
   
       const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
           e.preventDefault();
@@ -110,6 +124,31 @@ export function FileTable({ files, onFileSelect, addNewFile }: FileTableProps) {
           
     setSelectedFile(null);
   };
+
+  const handleLanguageSelect = async (language: string) => {
+    setSelectedLanguage(language);
+  
+    const formData = new FormData();
+    formData.append("language", language);
+  
+    try {
+      const response = await fetch("/api/translate", {
+        method: "POST",
+        body: formData,
+      });
+  
+      if (!response.ok) throw new Error("Translation failed");
+  
+      const data = await response.json();
+      console.log("Translation successful:", data);
+      alert(`File translated to ${language} successfully!`);
+    } 
+    
+    catch (error) {
+      console.error("Translation error:", error);
+      alert("Translation failed.");
+    }
+  };
   
   return (
     <Table className="text-darkblue border-2 rounded-lg border-gray-200">
@@ -148,7 +187,19 @@ export function FileTable({ files, onFileSelect, addNewFile }: FileTableProps) {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem className="flex flex-row gap-x-3"><ScrollText />Translate</DropdownMenuItem>
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger className="flex flex-row gap-x-3"><ScrollText />Translate</DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                          <DropdownMenuGroup className="p-2">Scroll for more languages</DropdownMenuGroup>
+                            {languages.map((lang) => (
+                              <DropdownMenuItem key={lang} onClick={() => handleLanguageSelect(lang)}>
+                                {lang}
+                              </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
                     <DropdownMenuItem className="flex flex-row gap-x-3"><Trash2 />Delete</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
