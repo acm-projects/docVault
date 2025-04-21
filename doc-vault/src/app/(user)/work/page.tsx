@@ -128,8 +128,8 @@ const Work = () => {
   
   return (
     <div className="text-darkblue max-container padding-container mb-10 mt-8">
-        <h1 className="p-4 text-4xl font-bold text-lighterred">Work</h1>
-        <div className="p-4">
+        <h1 className="p-10 text-4xl font-bold text-lighterred">Work</h1>
+        <div className="px-10 pb-10">
           <div className="flex justify-end text-darkblue gap-2">
             <Toggle variant="outline" aria-label="Toggle created date">Created</Toggle>
             <Toggle variant="outline" aria-label="Toggle modified date">Modified</Toggle>

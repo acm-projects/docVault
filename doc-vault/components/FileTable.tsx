@@ -1,27 +1,20 @@
 "use client";
 
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { CirclePlus } from "lucide-react";
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TableRow,
+  } from "@/components/ui/table"
+import { CirclePlus, MoreHorizontal, ScrollText, Trash2 } from "lucide-react";
 import { Button } from "./ui/Button";
-import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
-
+import { DragEvent, useState } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+   
 interface File {
   name: string;
   path: string;
@@ -38,6 +31,31 @@ interface FileTableProps {
 }
 
 export function FileTable({ files, onFileSelect, addNewFile }: FileTableProps) {
+  const [dragOver, setDragOver] = useState(false);
+      const [dropped, setDropped] = useState(false);
+  
+      const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+          e.preventDefault();
+          setDragOver(true);
+      }
+  
+      const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+          e.preventDefault();
+          setDragOver(false);
+          setDropped(false);
+      }
+  
+      const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+          e.preventDefault();
+          setDragOver(false);
+          setDropped(true);
+  
+          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+              const file = e.dataTransfer.files[0];
+              console.log("Dropped file: ", file);
+          }
+      }
+  
   const [newFile, setNewFile] = useState<File>({
     name: "",
     path: "",
@@ -124,6 +142,7 @@ export function FileTable({ files, onFileSelect, addNewFile }: FileTableProps) {
           <TableHead>Tag</TableHead>
           <TableHead>Modified</TableHead>
           <TableHead>Created</TableHead>
+          <TableHead></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody className="rounded-md">

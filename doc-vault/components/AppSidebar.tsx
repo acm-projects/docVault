@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useVisibleSection } from "@/hooks/useVisibleSection";
 import AnchorLink from "react-anchor-link-smooth-scroll";
-import { Home, Folder, Settings, ChevronUp, User2, ChevronDown } from "lucide-react";
+import { Home, Folder, Settings, User2, ChevronDown, ArrowLeft } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -18,7 +18,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import Image from "next/image";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
 
 const sections = [
@@ -33,12 +33,11 @@ export function AppSidebar() {
 
   return (
     <>
-      <div className="relative">
-        <SidebarTrigger className="absolute top-0 right-0" />
-      </div>
       <Sidebar>
         <Link href="/">
-          <SidebarHeader className="p-10 text-3xl font-semibold text-center cursor-pointer">docVault</SidebarHeader>
+          <SidebarHeader className="p-12 text-3xl font-semibold text-center cursor-pointer">
+            <Image src="/LogoWhite.png" alt="docVault" height={100} width={200} />
+          </SidebarHeader>
         </Link>
         <SidebarContent>
           <SidebarMenu className="flexCenter">
@@ -97,33 +96,24 @@ export function AppSidebar() {
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
+
+            <SidebarMenuItem className="py-5">
+              <SidebarMenuButton
+                className={`hover:font-bold hover:bg-lighterred transition-all text-2xl ${
+                  pathname === "/account" ? "bg-lighterred font-bold" : ""
+                }`}
+              >
+                <Link className="flex" href="/account">
+                  <User2 className="mx-2" size="32" />
+                  <span className="px-7">Account</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>
 
         <SidebarFooter>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton className="text-lg">
-                    <User2 size="32" />
-                    <span>Username</span>
-                    <ChevronUp className="ml-auto" />
-                  </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent side="top" className="w-[--radix-popper-anchor-width]">
-                  <Link href="/account">
-                    <DropdownMenuItem>
-                      <span>Account</span>
-                    </DropdownMenuItem>
-                  </Link>
-                  <DropdownMenuItem>
-                    <span>Sign out</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          <SidebarTrigger className="absolute bottom-0 right-0" >Collapse <ArrowLeft /></SidebarTrigger>
         </SidebarFooter>
       </Sidebar>
     </>
