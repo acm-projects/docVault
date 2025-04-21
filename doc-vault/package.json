@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "extend": "next build && mv out/_next out/next && rsync -a --exclude='.*' extension/ out/",
+    "extend": "next build && move out/_next out/next && robocopy ./extension ./out /E",
     "start": "next start",
     "lint": "next lint"
   },

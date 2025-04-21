@@ -22,49 +22,26 @@ type FileItem = {
   modified: string;
 };
 
-const folders = [
-  {
-    name: "Finances",
-    body: "Financial documents like statements or budgets.",
-    color: "text-orange-600",
-    subfolders: ["Bank Statements", "Bills", "Tax Documents", "Budget & Planning"],
-  },
-  {
-    name: "Health",
-    body: "This is a folder for medical documents.",
-    color: "text-blue-500",
-    subfolders: ["Medical Records", "Insurance", "Prescriptions", "Appointments"],
-  },
-  {
-    name: "Identification",
-    body: "This is a folder for identification.",
-    color: "text-red",
-    subfolders: ["Driver License", "Passport", "Birth Certificate", "Social Security"],
-  },
-  {
-    name: "Travel",
-    body: "This is a folder for travel documents.",
-    color: "text-yellow-600",
-    subfolders: ["Itineraries", "Bookings", "Travel Insurance", "Visa Documents"],
-  },
-  {
-    name: "Property",
-    body: "This is a folder for property documents.",
-    color: "text-green-600",
-    subfolders: ["Lease Agreements", "Utility Bills", "Maintainance Records"],
-  },
-  {
-    name: "Other Documents",
-    body: "This is a folder for other miscellaneous documents.",
-    color: "text-blue-900",
-    subfolders: ["Receipts", "Warranties", "Personal Projects", "Letters"],
-  },
-];
+interface PersonalProps {
+  folders: {
+    name: string;
+    body: string;
+    color: string;
+    subfolders: string[];
+  }[],
+  groupedFiles: Record<string, FileItem[]>,
+  addFolders:(folder: {
+    name: string;
+    body: string;
+    color: string;
+    subfolders: string[];
+  }[]) => void,
+  setGroup:(group: Record<string, FileItem[]>) => void
+}
 
-export default function Personal() {
+export default function Personal({folders, groupedFiles, addFolders, setGroup}: PersonalProps) {
   const [selectedFile, setSelectedFile] = useState<FileItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [groupedFiles, setGroupedFiles] = useState<Record<string, FileItem[]>>({});
 
   const handleFileSelect = async (file: FileItem) => {
     const idToken = sessionStorage.getItem("idToken");
@@ -128,7 +105,23 @@ export default function Personal() {
         const groupedCleaned: { [key: string]: FileItem[] } = {};
   
         for (const [subsubtype, files] of Object.entries(groupedRaw)) {
-          
+          for (let i = 0; i < files.length; i++) {
+            const subtype = files[i].document_subtype.toLowerCase();
+            if (!folders.some(e => e.name.toLowerCase() == subtype)) {
+              const newFolders = [...folders]
+              newFolders.push({
+                name: `${subtype}`,
+                body: `This is a folder for ${subtype} documents.`,
+                color: "text-blue-900",
+                subfolders: [`${subsubtype}`]
+              })
+              addFolders(newFolders)
+            } else if (!folders.find(e => e.name.toLowerCase() == subtype)?.subfolders.some(e => e.toLowerCase() == subsubtype)) {
+              const newFolders = [...folders]
+              newFolders.find(e => e.name.toLowerCase() == subtype)?.subfolders.push(subsubtype);
+              addFolders(newFolders)
+            }
+          }
           groupedCleaned[subsubtype.toLowerCase()] = files.map((file: any) => {
             const extension = file.document_name.split(".").pop()?.toLowerCase();
             return {
@@ -146,17 +139,14 @@ export default function Personal() {
         }
   
         
-        setGroupedFiles(groupedCleaned);
+        setGroup(groupedCleaned);
       } catch (err) {
         
       }
     };
-  
     fetchFiles();
-  }, []);
-  
-  
-  
+  }, [folders]);
+
 
   return (
     <section id="personal">

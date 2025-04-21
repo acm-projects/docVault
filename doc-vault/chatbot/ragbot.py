@@ -39,7 +39,7 @@ prompt_template = PromptTemplate(
 llm_chain = prompt_template | llm | StrOutputParser()
 
 def query(q):
-    docs = vector_store.similarity_search(query=q, k=1)
+    docs = vector_store.similarity_search(query=q, k=3)
     '''retriever.invoke(query)'''
     for doc in docs:
         print(doc.page_content)

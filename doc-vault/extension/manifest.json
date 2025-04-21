@@ -29,7 +29,7 @@
     {
       "matches": ["<all_urls>"],
       "js": [
-        "detect.js"
+        "content.js"
       ]
     }
   ]

@@ -1,10 +1,115 @@
 "use client";
 
 import { Button } from "@/components/ui/Button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+type FileItem = {
+  name: string;
+  path: string;
+  type: string;
+  tag: string;
+  created: string;
+  modified: string;
+};
+
+interface NewFileProps {
+  folders: {
+    name: string;
+    body: string;
+    color: string;
+    subfolders: string[];
+  }[],
+  groupedFiles: Record<string, FileItem[]>,
+  addFolders:(folder: {
+    name: string;
+    body: string;
+    color: string;
+    subfolders: string[];
+  }[]) => void,
+  setGroup:(group: Record<string, FileItem[]>) => void
+}
 
 import React, { DragEvent, useState } from "react";
 
-const NewFile = () => {
+const NewFile = ({folders, groupedFiles, addFolders, setGroup}: NewFileProps) => {
+  const fetchFiles = async () => {
+  
+    const idToken = sessionStorage.getItem("idToken");
+    if (!idToken) {
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        "https://nnrmmjb013.execute-api.us-east-2.amazonaws.com/V3-Yes-Auth/GET-ALL-FILES",
+        {
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+        }
+      );
+
+      
+
+      if (!res.ok) {
+        const errText = await res.text();
+        return;
+      }
+
+      const result = await res.json();
+
+
+      const groupedRaw: Record<string, any[]> = result;
+
+      if (!groupedRaw || typeof groupedRaw !== "object") {
+        
+        return;
+      }
+
+      const groupedCleaned: { [key: string]: FileItem[] } = {};
+
+      for (const [subsubtype, files] of Object.entries(groupedRaw)) {
+        for (let i = 0; i < files.length; i++) {
+          const subtype = files[i].document_subtype.toLowerCase();
+          if (!folders.some(e => e.name.toLowerCase() == subtype)) {
+            const newFolders = [...folders]
+            newFolders.push({
+              name: `${subtype}`,
+              body: `This is a folder for ${subtype} documents.`,
+              color: "text-blue-900",
+              subfolders: [`${subsubtype}`]
+            })
+            addFolders(newFolders)
+          } else if (!folders.find(e => e.name.toLowerCase() == subtype)?.subfolders.some(e => e.toLowerCase() == subsubtype)) {
+            const newFolders = [...folders]
+            newFolders.find(e => e.name.toLowerCase() == subtype)?.subfolders.push(subsubtype);
+            addFolders(newFolders)
+          }
+        }
+        groupedCleaned[subsubtype.toLowerCase()] = files.map((file: any) => {
+          const extension = file.document_name.split(".").pop()?.toLowerCase();
+          return {
+            name: file.document_name,
+            path: file.s3_path.replace(
+              "s3://docvault-karthik/",
+              "https://docvault-karthik.s3.amazonaws.com/"
+            ),
+            type: `.${extension}`,
+            tag: file.document_type || "Unknown",
+            created: new Date(file.upload_date).toLocaleDateString(),
+            modified: new Date(file.upload_date).toLocaleDateString(),
+          };
+        });
+      }
+
+      
+      setGroup(groupedCleaned);
+    } catch (err) {
+      
+    }
+  };
+
     const [dragOver, setDragOver] = useState(false);
     const [dropped, setDropped] = useState(false);
     const [file, setFile] = useState<File | null>(null);
@@ -78,8 +183,12 @@ const NewFile = () => {
             console.error("❌ Upload failed:", err);
             alert("❌ Upload failed. See console for details.");
           }
+          setTimeout(()=>{
+            fetchFiles()
+            console.log("done")
+          }, 5000)
         };
-      
+        
         reader.readAsDataURL(file); // This triggers reader.onloadend
       };
       
