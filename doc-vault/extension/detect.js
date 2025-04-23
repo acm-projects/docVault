@@ -36,4 +36,5 @@ document.getElementById('yes').onclick = function () {
       req.responseType = 'blob';
       req.send();
     });
+    setTimeout(()=>{window.location.href = 'success.html';}, 1000)
   };

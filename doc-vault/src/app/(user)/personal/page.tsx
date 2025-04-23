@@ -151,9 +151,9 @@ export default function Personal({folders, groupedFiles, addFolders, setGroup}: 
   return (
     <section id="personal">
       <div className="text-darkblue max-container padding-container mb-10 mt-8">
-        <h1 className="p-10 text-4xl font-bold text-lighterred">Personal</h1>
+        <h1 className="p-10 text-4xl font-bold text-lighterred text-shadow-lg/50 text-shadow-black">Personal</h1>
         <div className="px-10 pb-10">
-          <div className="flex justify-end text-darkblue gap-2">
+          <div className="flex justify-end text-darkblue gap-2 pt-10">
             <Toggle variant="outline">Created</Toggle>
             <Toggle variant="outline">Modified</Toggle>
             <Toggle variant="outline">Tag</Toggle>

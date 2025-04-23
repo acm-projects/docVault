@@ -180,10 +180,10 @@ const School = () => {
         <h1 className="py-5 text-4xl font-bold text-lighterred">School</h1>
       </div>
 
-       <Tabs defaultValue="to-do" className="px-10 w-full">
-        <TabsList className="grid w-full grid-cols-2">
+       <Tabs defaultValue="classes" className="px-10 w-full">
+        <TabsList className="grid w-full grid-cols-2 shadow-lg">
+        <TabsTrigger value="classes">Classes</TabsTrigger>
             <TabsTrigger value="to-do">To Do</TabsTrigger>
-            <TabsTrigger value="classes">Classes</TabsTrigger>
         </TabsList>
         <TabsContent value="to-do">
           <DueDateTable files={hwFiles} addNewHwFile={addNewHwFile} />

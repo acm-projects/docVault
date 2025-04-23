@@ -18,6 +18,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import Image from "next/image";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
 
 const sections = [
@@ -32,12 +33,11 @@ export function AppSidebar() {
 
   return (
     <>
-      <div className="relative">
-        
-      </div>
       <Sidebar>
         <Link href="/">
-          <SidebarHeader className="p-10 text-3xl font-semibold text-center cursor-pointer">docVault</SidebarHeader>
+          <SidebarHeader className="p-12 text-3xl font-semibold text-center cursor-pointer">
+            <Image src="/LogoWhite.png" alt="docVault" height={100} width={200} />
+          </SidebarHeader>
         </Link>
         <SidebarContent>
           <SidebarMenu className="flexCenter">
