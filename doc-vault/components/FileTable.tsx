@@ -1,20 +1,21 @@
 "use client";
 
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table"
+  Table, TableBody, TableCell, TableFooter,
+  TableHead, TableHeader, TableRow
+} from "@/components/ui/table";
 import { CirclePlus, MoreHorizontal, ScrollText, Trash2 } from "lucide-react";
 import { Button } from "./ui/Button";
+import {
+  Dialog, DialogContent, DialogDescription,
+  DialogFooter, DialogHeader, DialogTitle, DialogTrigger
+} from "./ui/dialog";
+import {
+  DropdownMenu, DropdownMenuContent,
+  DropdownMenuItem, DropdownMenuTrigger
+} from "./ui/dropdown-menu";
 import { DragEvent, useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
-   
+
 interface File {
   name: string;
   path: string;
@@ -32,112 +33,160 @@ interface FileTableProps {
 
 export function FileTable({ files, onFileSelect, addNewFile }: FileTableProps) {
   const [dragOver, setDragOver] = useState(false);
-      const [dropped, setDropped] = useState(false);
-  
-      const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-          e.preventDefault();
-          setDragOver(true);
-      }
-  
-      const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
-          e.preventDefault();
-          setDragOver(false);
-          setDropped(false);
-      }
-  
-      const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-          e.preventDefault();
-          setDragOver(false);
-          setDropped(true);
-  
-          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-              const file = e.dataTransfer.files[0];
-              console.log("Dropped file: ", file);
-          }
-      }
-  
+  const [dropped, setDropped] = useState(false);
+  const [fileToUpload, setFileToUpload] = useState<File | null>(null);
   const [newFile, setNewFile] = useState<File>({
     name: "",
     path: "",
     tag: "",
     type: "",
     modified: new Date().toLocaleDateString(),
-    created: "",
+    created: new Date().toLocaleDateString(),
   });
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragOver(false);
+    setDropped(true);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      const ext = file.name.split(".").pop();
+      setNewFile({
+        name: file.name,
+        path: URL.createObjectURL(file),
+        tag: "",
+        type: ext ? `.${ext}` : "unknown",
+        created: new Date(file.lastModified).toLocaleDateString(),
+        modified: new Date(file.lastModified).toLocaleDateString(),
+      });
+      setFileToUpload(file);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
-    const fileInput = document.getElementById("file-input") as HTMLInputElement;
-    const file = fileInput?.files?.[0];
-    if (!file) {
-      alert("Please select a file first.");
-      return;
-    }
-  
+    const file = fileToUpload;
+    if (!file) return alert("Please upload a file first.");
+    const idToken = sessionStorage.getItem("idToken");
+    if (!idToken) return alert("Not logged in.");
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64data = reader.result?.toString().split(",")[1];
+      const payload = {
+        fileName: file.name,
+        file: base64data,
+        tag: newFile.tag,
+        subtype: "personal",
+      };
+
+      try {
+        const res = await fetch("https://nnrmmjb013.execute-api.us-east-2.amazonaws.com/V3-Yes-Auth/UPLOAD-WITH-TAGS", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${idToken}`,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) throw new Error(await res.text());
+
+        const ext = file.name.split(".").pop()?.toLowerCase();
+        const uploaded: File = {
+          name: file.name,
+          path: `https://docvault-karthik.s3.amazonaws.com/${file.name}`,
+          type: ext ? `.${ext}` : "unknown",
+          tag: newFile.tag,
+          created: new Date().toLocaleDateString(),
+          modified: new Date().toLocaleDateString(),
+        };
+        addNewFile(uploaded);
+        alert("✅ Upload successful!");
+      } catch (err) {
+        alert("❌ Upload failed.");
+        console.error(err);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleTranslate = async (fileName: string) => {
     const idToken = sessionStorage.getItem("idToken");
     if (!idToken) {
       alert("You're not logged in.");
       return;
     }
   
-    const reader = new FileReader();
-  
-    reader.onloadend = async () => {
-      const base64data = reader.result?.toString().split(",")[1];
-  
-      const payload = {
-        fileName: file.name,
-        file: base64data,
-        tag: newFile.tag,              // maps to document_subsubtype
-        subtype: "personal"            // default subtype
-      };
-  
-      try {
-        const response = await fetch(
-          "https://nnrmmjb013.execute-api.us-east-2.amazonaws.com/V3-Yes-Auth/UPLOAD-WITH-TAGS",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${idToken}`,
-            },
-            body: JSON.stringify(payload),
-          }
-        );
-  
-        if (!response.ok) {
-          const text = await response.text();
-          throw new Error(text);
+    try {
+      const response = await fetch(
+        "https://nnrmmjb013.execute-api.us-east-2.amazonaws.com/V3-Yes-Auth/TRANSLATE-V1", // Replace with your real endpoint
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${idToken}`,
+          },
+          body: JSON.stringify({
+            fileName: fileName,
+            targetLanguage: "es", // or dynamically change this based on UI
+          }),
         }
+      );
   
-        const extension = file.name.split(".").pop()?.toLowerCase();
-        const uploadedFile: File = {
-          name: file.name,
-          path: `https://docvault-karthik.s3.amazonaws.com/${file.name}`,
-          type: `.${extension}`,
-          tag: newFile.tag || "Manual",
-          created: new Date().toLocaleDateString(),
-          modified: new Date().toLocaleDateString(),
-        };
-  
-        addNewFile(uploadedFile);
-        alert("✅ File uploaded successfully!");
-      } catch (err) {
-        console.error("❌ Upload failed:", err);
-        alert("❌ Upload failed. See console for details.");
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText);
       }
-    };
   
-    reader.readAsDataURL(file);
+      const data = await response.json();
+      console.log("✅ Translated file URL:", data.translatedUrl);
+      alert("✅ File translated! Check your folder for the translated version.");
+    } catch (err) {
+      console.error("❌ Translation failed:", err);
+      alert("❌ Failed to translate file.");
+    }
   };
+
+  const handleDelete = async (fileName: string) => {
+    const idToken = sessionStorage.getItem("idToken");
+    if (!idToken) {
+      alert("You're not logged in.");
+      return;
+    }
+  
+    try {
+      const response = await fetch("https://nnrmmjb013.execute-api.us-east-2.amazonaws.com/V3-Yes-Auth/DELETE-V2", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ fileName }),
+      });
+  
+      if (!response.ok) {
+        const err = await response.text();
+        throw new Error(err);
+      }
+  
+      alert("✅ File deleted successfully!");
+      // Optionally: Remove the deleted file from the current list
+      // setFiles((prevFiles) => prevFiles.filter(f => f.name !== fileName));
+      window.location.reload(); // or refetch files if you prefer
+    } catch (err) {
+      console.error("❌ Failed to delete file:", err);
+      alert("❌ Failed to delete file.");
+    }
+  };
+  
   
 
   return (
-    <Table className="text-darkblue border-2 rounded-lg border-gray-200">
-      <TableHeader className="text-darkblue bg-gray-100">
+    <Table>
+      <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Name</TableHead>
+          <TableHead>Name</TableHead>
           <TableHead>Type</TableHead>
           <TableHead>Tag</TableHead>
           <TableHead>Modified</TableHead>
@@ -145,82 +194,81 @@ export function FileTable({ files, onFileSelect, addNewFile }: FileTableProps) {
           <TableHead></TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody className="rounded-md">
-        {files.map((file) => (
-          <TableRow
-            key={file.name}
-            className="px-5 cursor-pointer hover:bg-gray-200 transition"
-            onClick={() => onFileSelect(file)}
-          >
-            <TableCell className="font-medium pr-8">{file.name}</TableCell>
+      <TableBody>
+        {files.map(file => (
+          <TableRow key={file.name} onClick={() => onFileSelect(file)} className="cursor-pointer">
+            <TableCell>{file.name}</TableCell>
             <TableCell>{file.type}</TableCell>
             <TableCell>
-              <p className="p-1 w-20 text-center border-red border-2 rounded-md px-2">
-                {file.tag}
-              </p>
+              <p className="border p-1 text-center rounded">{file.tag}</p>
             </TableCell>
             <TableCell>{file.modified}</TableCell>
             <TableCell>{file.created}</TableCell>
+            <TableCell>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="p-0 h-8 w-8">
+                    <MoreHorizontal />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => handleTranslate(file.name)}>
+                <ScrollText className="mr-2" /> Translate
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleDelete(file.name)}>
+                <Trash2 className="mr-2" /> Delete
+                </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
       <TableFooter>
-        <TableRow className="bg-middlegray hover:bg-middlegray hover:font-bold transition-all">
-          <TableCell colSpan={5} className="text-center py-4">
+        <TableRow>
+          <TableCell colSpan={6} className="text-center">
             <Dialog>
               <DialogTrigger>
-                <div className="px-2 flex items-center">
-                  <CirclePlus className="left-10 text-lighterred" />
-                  <p className="px-5">Add New Item</p>
+                <div className="flex items-center justify-center gap-2">
+                  <CirclePlus className="text-red" /> Add New File
                 </div>
               </DialogTrigger>
-              <DialogContent className="bg-middlegray">
-                <DialogHeader>
-                  <DialogTitle>Add a new item</DialogTitle>
-                  <DialogDescription>
-                    Upload a new file to S3. Click save when you're done.
-                  </DialogDescription>
-                </DialogHeader>
-                <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <label htmlFor="file-input" className="text-right">
-                      Upload File
-                    </label>
-                    <input
-                      id="file-input"
-                      type="file"
-                      className="col-span-3 p-2"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          const fileExtension = file.name.includes(".") ? file.name.split(".").pop() : "unknown";
-                          setNewFile({
-                            name: file.name,
-                            path: URL.createObjectURL(file),
-                            tag: "",
-                            type: fileExtension || "unknown",
-                            created: new Date(file.lastModified).toLocaleDateString(),
-                            modified: new Date(file.lastModified).toLocaleDateString(),
-                          });
-                        }
-                      }}
-                    />
+              <DialogContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div
+                    onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                    onDragLeave={(e) => { e.preventDefault(); setDragOver(false); setDropped(false); }}
+                    onDrop={handleDrop}
+                    className={`w-full h-40 border-dashed border-2 flex justify-center items-center rounded ${dragOver ? "bg-gray-200" : "bg-white"}`}
+                  >
+                    {dropped ? "File Ready!" : "Drag and drop or select a file"}
                   </div>
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <label htmlFor="tag" className="text-right">
-                      Tag
-                    </label>
-                    <input
-                      id="tag"
-                      value={newFile.tag}
-                      onChange={(e) =>
-                        setNewFile({ ...newFile, tag: e.target.value })
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const ext = file.name.split(".").pop();
+                        setNewFile({
+                          name: file.name,
+                          path: URL.createObjectURL(file),
+                          tag: "",
+                          type: ext ? `.${ext}` : "unknown",
+                          created: new Date(file.lastModified).toLocaleDateString(),
+                          modified: new Date(file.lastModified).toLocaleDateString(),
+                        });
+                        setFileToUpload(file);
                       }
-                      className="col-span-3 border border-gray-300 rounded-md p-2"
-                    />
-                  </div>
+                    }}
+                  />
+                  <input
+                    placeholder="Tag"
+                    className="w-full border p-2 rounded"
+                    value={newFile.tag}
+                    onChange={(e) => setNewFile({ ...newFile, tag: e.target.value })}
+                  />
                   <DialogFooter>
-                    <Button type="submit">Save File</Button>
+                    <Button type="submit">Upload File</Button>
                   </DialogFooter>
                 </form>
               </DialogContent>

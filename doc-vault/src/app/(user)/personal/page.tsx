@@ -69,6 +69,7 @@ export default function Personal() {
   const handleFileSelect = async (file: FileItem) => {
     const idToken = sessionStorage.getItem("idToken");
     if (!idToken) return alert("Missing token");
+    console.log(idToken);
 
     try {
       const res = await fetch(
