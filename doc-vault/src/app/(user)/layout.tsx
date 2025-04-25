@@ -29,7 +29,7 @@ type FileItem = {
 };
 
 export default function RootLayout({ }: Readonly<{ children: React.ReactNode;}>) {
-  const [folders, setFolders] = useState([
+  const [pfolders, setPfolders] = useState([
           {
             name: "Finances",
             body: "Financial documents like statements or budgets.",
@@ -68,7 +68,48 @@ export default function RootLayout({ }: Readonly<{ children: React.ReactNode;}>)
           },
         ]);
 
-        const [groupedFiles, setGroupedFiles] = useState<Record<string, FileItem[]>>({});
+        const [sfolders, setSfolders] = useState([
+          {
+            name: "CS 3377",
+            body: "Systems Programming in Unix and Other Environments",
+            color: "text-green-600",
+            subfolders: ["Notes", "Homework", "Exams & Quizzes", "Projects", "Class Info"],
+          },
+          {
+            name: "ECS 2390",
+            body: "Professional and Technical Communications",
+            color: "text-red",
+            subfolders: ["Notes", "Homework", "Exams & Quizzes", "Projects", "Class Info"],
+          },
+          {
+            name: "CS 3345",
+            body: "Data Structures and Algorithms",
+            color: "text-blue-600",
+            subfolders: ["Notes", "Homework", "Exams & Quizzes", "Projects", "Class Info"],
+          },
+          {
+            name: "PHYS 2426",
+            body: "University Physics II + Lab",
+            color: "text-yellow-600",
+            subfolders: ["Notes", "Homework", "Exams & Quizzes", "Projects", "Class Info"],
+          },
+          {
+            name: "Academic Records",
+            body: "Contains important records like transcripts and enrollment documents.",
+            color: "text-blue-900",
+            subfolders: [
+              "Transcripts",
+              "Resumes",
+              "Letters of Recommendation",
+              "Certificates",
+              "Test Scores (SAT, GRE, etc.)",
+              "Enrollment Documents",
+            ],
+          },
+        ]);
+
+        const [groupedPfiles, setGroupedPfiles] = useState<Record<string, FileItem[]>>({});
+        const [groupedSfiles, setGroupedSfiles] = useState<Record<string, FileItem[]>>({});
   return (
     <UserProvider>
         <Chat/>
@@ -85,29 +126,40 @@ export default function RootLayout({ }: Readonly<{ children: React.ReactNode;}>)
               
               <main className="flex-1 p-4">
                 <NewFile
-                folders={folders}
-                groupedFiles={groupedFiles}
+                folders={pfolders}
+                groupedFiles={groupedPfiles}
                 addFolders={(newFolders: {
                   name: string;
                   body: string;
                   color: string;
                   subfolders: string[];
-                }[]) => setFolders([...newFolders])}
-                setGroup={(group: Record<string, FileItem[]>) => setGroupedFiles(group)}
+                }[]) => setPfolders([...newFolders])}
+                setGroup={(group: Record<string, FileItem[]>) => setGroupedPfiles(group)}
                  />
                 <section id="personal"><Personal
-                folders={folders}
-                groupedFiles={groupedFiles}
+                folders={pfolders}
+                groupedFiles={groupedPfiles}
                 addFolders={(newFolders: {
                   name: string;
                   body: string;
                   color: string;
                   subfolders: string[];
-                }[]) => setFolders([...newFolders])}
-                setGroup={(group: Record<string, FileItem[]>) => setGroupedFiles(group)}
+                }[]) => setPfolders([...newFolders])}
+                setGroup={(group: any) => setGroupedPfiles(group)}
                 />
                 </section>
-                <section id="school"><School /></section>
+                <section id="school"><School
+                folders={sfolders}
+                groupedFiles={groupedSfiles}
+                addFolders={(newFolders: {
+                  name: string;
+                  body: string;
+                  color: string;
+                  subfolders: string[];
+                }[]) => setSfolders([...newFolders])}
+                setGroup={(group: any) => setGroupedSfiles(group)}
+                 />
+                 </section>
                 <section id="work"><Work /></section>
               </main>
             </div>

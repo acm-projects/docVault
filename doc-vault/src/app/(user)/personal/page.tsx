@@ -46,6 +46,7 @@ export default function Personal({folders, groupedFiles, addFolders, setGroup}: 
   const handleFileSelect = async (file: FileItem) => {
     const idToken = sessionStorage.getItem("idToken");
     if (!idToken) return alert("Missing token");
+    console.log(idToken);
 
     try {
       const res = await fetch(
@@ -67,14 +68,22 @@ export default function Personal({folders, groupedFiles, addFolders, setGroup}: 
     }
   };
 
+  const addNewFile = (newFile: FileItem) => {
+    const tagKey = newFile.tag.toLowerCase();
+    /*setGroup(prev => ({
+      ...prev,
+      [tagKey]: [...(prev[tagKey] || []), newFile],
+    }));*/
+    const files = groupedFiles
+    files.tagKey.push(newFile)
+    setGroup(files)
+  };
+
   useEffect(() => {
     const fetchFiles = async () => {
-  
       const idToken = sessionStorage.getItem("idToken");
-      if (!idToken) {
-        return;
-      }
-  
+      if (!idToken) return;
+
       try {
         const res = await fetch(
           "https://nnrmmjb013.execute-api.us-east-2.amazonaws.com/V3-Yes-Auth/GET-ALL-FILES",
@@ -84,28 +93,19 @@ export default function Personal({folders, groupedFiles, addFolders, setGroup}: 
             },
           }
         );
-  
-        
-  
-        if (!res.ok) {
-          const errText = await res.text();
-          return;
-        }
-  
-        const result = await res.json();
 
-  
+        if (!res.ok) return;
+
+        const result = await res.json();
         const groupedRaw: Record<string, any[]> = result;
-  
-        if (!groupedRaw || typeof groupedRaw !== "object") {
-          
-          return;
-        }
-  
+
+        if (!groupedRaw || typeof groupedRaw !== "object") return;
+
         const groupedCleaned: { [key: string]: FileItem[] } = {};
-  
+
         for (const [subsubtype, files] of Object.entries(groupedRaw)) {
           for (let i = 0; i < files.length; i++) {
+            if (files[i].document_type.toLowerCase() == 'personal') {
             const subtype = files[i].document_subtype.toLowerCase();
             if (!folders.some(e => e.name.toLowerCase() == subtype)) {
               const newFolders = [...folders]
@@ -121,9 +121,12 @@ export default function Personal({folders, groupedFiles, addFolders, setGroup}: 
               newFolders.find(e => e.name.toLowerCase() == subtype)?.subfolders.push(subsubtype);
               addFolders(newFolders)
             }
+            }
           }
           groupedCleaned[subsubtype.toLowerCase()] = files.map((file: any) => {
             const extension = file.document_name.split(".").pop()?.toLowerCase();
+            const subtype = file.document_subtype; 
+            //console.log(subtype.toLowerCase());
             return {
               name: file.document_name,
               path: file.s3_path.replace(
@@ -131,7 +134,7 @@ export default function Personal({folders, groupedFiles, addFolders, setGroup}: 
                 "https://docvault-karthik.s3.amazonaws.com/"
               ),
               type: `.${extension}`,
-              tag: file.document_type || "Unknown",
+              tag: file.document_subsubtype || "Unknown",
               created: new Date(file.upload_date).toLocaleDateString(),
               modified: new Date(file.upload_date).toLocaleDateString(),
             };
@@ -188,7 +191,7 @@ export default function Personal({folders, groupedFiles, addFolders, setGroup}: 
                           <FileTable
                             files={groupedFiles[sub.toLowerCase()] || []}
                             onFileSelect={handleFileSelect}
-                            addNewFile={() => {}}
+                            addNewFile={addNewFile}
                           />
                         </AccordionContent>
                       </AccordionItem>

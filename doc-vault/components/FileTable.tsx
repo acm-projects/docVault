@@ -1,34 +1,34 @@
-"use client"
+"use client";
 
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table"
+  Table, TableBody, TableCell, TableFooter,
+  TableHead, TableHeader, TableRow
+} from "@/components/ui/table";
 import { CirclePlus, MoreHorizontal, ScrollText, Trash2 } from "lucide-react";
 import { Button } from "./ui/Button";
+import {
+  Dialog, DialogContent, DialogDescription,
+  DialogFooter, DialogHeader, DialogTitle, DialogTrigger
+} from "./ui/dialog";
+import {
+  DropdownMenu, DropdownMenuContent,
+  DropdownMenuItem, DropdownMenuTrigger
+} from "./ui/dropdown-menu";
 import { DragEvent, useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "./ui/dropdown-menu";
-import { DropdownMenuGroup, DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
    
-interface File {
-    name: string;
-    path: string;
-    type: string;
-    tag: string;
-    modified: string;
-    created: string;
+interface iFile {
+  name: string;
+  path: string;
+  type: string;
+  tag: string;
+  modified: string;
+  created: string;
 }
 
 interface FileTableProps {
-    files: File[];
-    onFileSelect: (file: File) => void;
-    addNewFile: (newFile: File) => void;
+  files: iFile[];
+  onFileSelect: (file: iFile) => void;
+  addNewFile: (newFile: iFile) => void;
 }
 
 const languages = [
@@ -45,116 +45,160 @@ const languages = [
 
 export function FileTable({ files, onFileSelect, addNewFile }: FileTableProps) {
   const [dragOver, setDragOver] = useState(false);
-      const [dropped, setDropped] = useState(false);
-      const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
-  
-      const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-          e.preventDefault();
-          setDragOver(true);
-      }
-  
-      const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
-          e.preventDefault();
-          setDragOver(false);
-          setDropped(false);
-      }
-  
-      const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-          e.preventDefault();
-          setDragOver(false);
-          setDropped(true);
-  
-          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-              const file = e.dataTransfer.files[0];
-              console.log("Dropped file: ", file);
-          }
-      }
-  
-  const [newFile, setNewFile] = useState<File>({
+  const [dropped, setDropped] = useState(false);
+  const [fileToUpload, setFileToUpload] = useState<File | null>(null);
+  const [newFile, setNewFile] = useState<iFile>({
     name: "",
     path: "",
     tag: "",
     type: "",
     modified: new Date().toLocaleDateString(),
-    created: "",
+    created: new Date().toLocaleDateString(),
   });
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-      
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-      
-    if (!newFile.name) {
-      alert("Please enter a name.");
-      return;
+    setDragOver(false);
+    setDropped(true);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      const ext = file.name.split(".").pop();
+      setNewFile({
+        name: file.name,
+        path: URL.createObjectURL(file),
+        tag: "",
+        type: ext ? `.${ext}` : "unknown",
+        created: new Date(file.lastModified).toLocaleDateString(),
+        modified: new Date(file.lastModified).toLocaleDateString(),
+      });
+      setFileToUpload(file);
     }
-    
-    const fileExtension = newFile.name.includes(".")
-        ? newFile.name.split(".").pop()
-        : "unknown";
-          
-    const formattedCreateDate = new Date(newFile.created)
-      .toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    });
-  
-    const fileToAdd = {
-      ...newFile,
-      type: fileExtension || "unknown",
-      created: formattedCreateDate,
-    };
-      
-    addNewFile(fileToAdd);
-    console.log("New File Added:", fileToAdd);
-      
-    setNewFile({
-      name: "",
-      path: "",
-      tag: "",
-      type: "",
-      modified: new Date().toLocaleDateString("en-US", {
-        month: "2-digit",
-        day: "2-digit",
-        year: "numeric",
-      }),
-      created: "",
-    });
-          
-    setSelectedFile(null);
   };
 
-  const handleLanguageSelect = async (language: string) => {
-    setSelectedLanguage(language);
-  
-    const formData = new FormData();
-    formData.append("language", language);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const file = fileToUpload;
+    if (!file) return alert("Please upload a file first.");
+    const idToken = sessionStorage.getItem("idToken");
+    if (!idToken) return alert("Not logged in.");
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64data = reader.result?.toString().split(",")[1];
+      const payload = {
+        fileName: file.name,
+        file: base64data,
+        tag: newFile.tag,
+        subtype: "personal",
+      };
+
+      try {
+        const res = await fetch("https://nnrmmjb013.execute-api.us-east-2.amazonaws.com/V3-Yes-Auth/UPLOAD-WITH-TAGS", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${idToken}`,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) throw new Error(await res.text());
+
+        const ext = file.name.split(".").pop()?.toLowerCase();
+        const uploaded: iFile = {
+          name: file.name,
+          path: `https://docvault-karthik.s3.amazonaws.com/${file.name}`,
+          type: ext ? `.${ext}` : "unknown",
+          tag: newFile.tag,
+          created: new Date().toLocaleDateString(),
+          modified: new Date().toLocaleDateString(),
+        };
+        addNewFile(uploaded);
+        alert("✅ Upload successful!");
+      } catch (err) {
+        alert("❌ Upload failed.");
+        console.error(err);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleTranslate = async (fileName: string) => {
+    const idToken = sessionStorage.getItem("idToken");
+    if (!idToken) {
+      alert("You're not logged in.");
+      return;
+    }
   
     try {
-      const response = await fetch("/api/translate", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "https://nnrmmjb013.execute-api.us-east-2.amazonaws.com/V3-Yes-Auth/TRANSLATE-V1", // Replace with your real endpoint
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${idToken}`,
+          },
+          body: JSON.stringify({
+            fileName: fileName,
+            targetLanguage: "es", // or dynamically change this based on UI
+          }),
+        }
+      );
   
-      if (!response.ok) throw new Error("Translation failed");
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText);
+      }
   
       const data = await response.json();
-      console.log("Translation successful:", data);
-      alert(`File translated to ${language} successfully!`);
-    } 
-    
-    catch (error) {
-      console.error("Translation error:", error);
-      alert("Translation failed.");
+      console.log("✅ Translated file URL:", data.translatedUrl);
+      alert("✅ File translated! Check your folder for the translated version.");
+    } catch (err) {
+      console.error("❌ Translation failed:", err);
+      alert("❌ Failed to translate file.");
+    }
+  };
+
+  const handleDelete = async (fileName: string) => {
+    const idToken = sessionStorage.getItem("idToken");
+    if (!idToken) {
+      alert("You're not logged in.");
+      return;
+    }
+  
+    try {
+      const response = await fetch("https://nnrmmjb013.execute-api.us-east-2.amazonaws.com/V3-Yes-Auth/DELETE-V2", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ fileName }),
+      });
+  
+      if (!response.ok) {
+        const err = await response.text();
+        throw new Error(err);
+      }
+  
+      alert("✅ File deleted successfully!");
+      // Optionally: Remove the deleted file from the current list
+      // setFiles((prevFiles) => prevFiles.filter(f => f.name !== fileName));
+      window.location.reload(); // or refetch files if you prefer
+    } catch (err) {
+      console.error("❌ Failed to delete file:", err);
+      alert("❌ Failed to delete file.");
     }
   };
   
+  
+
   return (
-    <Table className="text-darkblue border-2 rounded-lg border-gray-200">
-      <TableHeader className="text-darkblue bg-gray-100">
+    <Table>
+      <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Name</TableHead>
+          <TableHead>Name</TableHead>
           <TableHead>Type</TableHead>
           <TableHead>Tag</TableHead>
           <TableHead>Modified</TableHead>
@@ -162,129 +206,88 @@ export function FileTable({ files, onFileSelect, addNewFile }: FileTableProps) {
           <TableHead></TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody className="rounded-md">
-       {files.map((file) => (
-          <TableRow 
-            key={file.name}
-            className="px-5 cursor-pointer hover:bg-gray-200 transition"
-            onClick={() => onFileSelect(file)}
-          >
-              <TableCell className="font-medium pr-8">{file.name}</TableCell>
-              <TableCell>{file.type}</TableCell>
-              <TableCell>
-              <p className="p-1 w-20 text-center border-red border-2 rounded-md px-2">
-                {file.tag}
-              </p>
-              </TableCell>
-              <TableCell>{file.modified}</TableCell>
-              <TableCell>{file.created}</TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                      <span className="sr-only">Open menu</span>
-                      <MoreHorizontal />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuSub>
-                      <DropdownMenuSubTrigger className="flex flex-row gap-x-3"><ScrollText />Translate</DropdownMenuSubTrigger>
-                      <DropdownMenuPortal>
-                        <DropdownMenuSubContent>
-                          <DropdownMenuGroup className="p-2">Scroll for more languages</DropdownMenuGroup>
-                            {languages.map((lang) => (
-                              <DropdownMenuItem key={lang} onClick={() => handleLanguageSelect(lang)}>
-                                {lang}
-                              </DropdownMenuItem>
-                            ))}
-                        </DropdownMenuSubContent>
-                      </DropdownMenuPortal>
-                    </DropdownMenuSub>
-                    <DropdownMenuItem className="flex flex-row gap-x-3"><Trash2 />Delete</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+      <TableBody>
+        {files.map(file => (
+          <TableRow key={file.name} onClick={() => onFileSelect(file)} className="cursor-pointer">
+            <TableCell>{file.name}</TableCell>
+            <TableCell>{file.type}</TableCell>
+            <TableCell>
+              <p className="border p-1 text-center rounded">{file.tag}</p>
+            </TableCell>
+            <TableCell>{file.modified}</TableCell>
+            <TableCell>{file.created}</TableCell>
+            <TableCell>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="p-0 h-8 w-8">
+                    <MoreHorizontal />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => handleTranslate(file.name)}>
+                <ScrollText className="mr-2" /> Translate
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleDelete(file.name)}>
+                <Trash2 className="mr-2" /> Delete
+                </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
       <TableFooter>
-          <TableRow className="bg-middlegray hover:bg-middlegray hover:font-bold transition-all">
-            <TableCell colSpan={6} className="text-center py-4">
-              <Dialog>
-                <DialogTrigger>
-                  <div className="px-2 flex items-center">
-                    <CirclePlus className="left-10 text-lighterred" />
-                    <p className="px-5">Add New Item</p>
+        <TableRow>
+          <TableCell colSpan={6} className="text-center">
+            <Dialog>
+              <DialogTrigger>
+                <div className="flex items-center justify-center gap-2">
+                  <CirclePlus className="text-red" /> Add New File
+                </div>
+              </DialogTrigger>
+              <DialogContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div
+                    onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                    onDragLeave={(e) => { e.preventDefault(); setDragOver(false); setDropped(false); }}
+                    onDrop={handleDrop}
+                    className={`w-full h-40 border-dashed border-2 flex justify-center items-center rounded ${dragOver ? "bg-gray-200" : "bg-white"}`}
+                  >
+                    {dropped ? "File Ready!" : "Drag and drop or select a file"}
                   </div>
-                </DialogTrigger>
-                <DialogContent className="bg-middlegray">
-                  <DialogHeader>
-                    <DialogTitle>Add a new item</DialogTitle>
-                    <DialogDescription>
-                      Create a new file entry here. Click save when you're done.
-                    </DialogDescription>
-                  </DialogHeader>
-
-                  <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-                    <div className="p-4 flex items-center justify-center w-full">
-                      <label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-1/2 h-64 shadow-lg p-10 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 ${dragOver ? "bg-middlegray" : "bg-white"}`}>
-                        <div 
-                          className="flex flex-col items-center justify-center pt-5 pb-6"
-                          onDragOver={handleDragOver}
-                          onDragLeave={handleDragLeave}
-                          onDrop={handleDrop}
-                          onChange={(e) => {
-                            const file = (e.target as HTMLInputElement).files?.[0];
-                            if (file) {
-                              const fileExtension = file.name.includes(".") ? file.name.split(".").pop() : "unknown";
-                              setNewFile({
-                                name: file.name,
-                                path: URL.createObjectURL(file),
-                                tag: "",
-                                type: fileExtension || "unknown",
-                                created: new Date(file.lastModified).toLocaleDateString(),
-                                modified: new Date(file.lastModified).toLocaleDateString(),
-                              });
-                            }
-                          }}
-                        >
-                          <svg className="w-8 h-8 mb-4 text-darkblue" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                          </svg>
-                          <p className="mb-2 text-sm text-darkblue">{dropped ? "File uploaded!" : "Click to upload or drag and drop"}</p>
-                        </div>
-                        <input 
-                          id="dropzone-file" 
-                          type="file" 
-                          className="hidden" 
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                          }}
-                        />
-                      </label>
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <label htmlFor="tag" className="text-right">
-                        Tag
-                      </label>
-                      <input
-                        id="tag"
-                        value={newFile.tag}
-                        onChange={(e) =>
-                          setNewFile({ ...newFile, tag: e.target.value })
-                        }
-                        className="col-span-3 border border-gray-300 rounded-md p-2"
-                      />
-                    </div>
-                    <DialogFooter>
-                      <Button type="submit">Save File</Button>
-                    </DialogFooter>
-                  </form>
-                </DialogContent>
-              </Dialog>
-            </TableCell>
-          </TableRow>
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const ext = file.name.split(".").pop();
+                        setNewFile({
+                          name: file.name,
+                          path: URL.createObjectURL(file),
+                          tag: "",
+                          type: ext ? `.${ext}` : "unknown",
+                          created: new Date(file.lastModified).toLocaleDateString(),
+                          modified: new Date(file.lastModified).toLocaleDateString(),
+                        });
+                        setFileToUpload(file);
+                      }
+                    }}
+                  />
+                  <input
+                    placeholder="Tag"
+                    className="w-full border p-2 rounded"
+                    value={newFile.tag}
+                    onChange={(e) => setNewFile({ ...newFile, tag: e.target.value })}
+                  />
+                  <DialogFooter>
+                    <Button type="submit">Upload File</Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </TableCell>
+        </TableRow>
       </TableFooter>
     </Table>
-  )
+  );
 }
