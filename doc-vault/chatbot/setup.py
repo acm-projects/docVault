@@ -14,7 +14,7 @@ index = pc.Index(index_name)
 embeddings = HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2')
 
 '''Add the path to your pdf file'''
-pdf_path = "c:/Users/nichr/Downloads/vsu.pdf"
+pdf_path = "c:/Users/nichr/Downloads/4341Hw3.pdf"
 reader = PdfReader(pdf_path)
 
 raw_text = ''
@@ -36,6 +36,6 @@ query_embedding = np.array(query_embedding, dtype=np.float32)
 query_embedding = query_embedding.tolist()
 list = []
 metadata = {"text": raw_text}
-list.append(("vector 5", query_embedding, metadata))
+list.append(("vector 6", query_embedding, metadata))
 index.upsert(list)
 

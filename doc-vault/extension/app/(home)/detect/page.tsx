@@ -10,14 +10,12 @@ const detect = () => {
             </div>
             <p className='text-md'>We detected you downloaded a file. Do you want to save it in docVault?</p>
             <div className="flex justify-center px-8 py-8 space-x-4">
-                <Link href="success.html">
                     <CustomBtnId
                         type="submit"
                         title="Yes"
                         variant="btn_red"
                         id = "yes"
                     />
-                </Link>
                 <Link href = "index.html">
                     <CustomBtnId
                         type="submit"

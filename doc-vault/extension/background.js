@@ -15,4 +15,7 @@ chrome.downloads.onChanged.addListener(function(delta) {
             }
         })
     }
+    chrome.storage.local.get(["accessToken"]).then((result) => {
+        console.log(result.accessToken)
+    })
 })

@@ -30,7 +30,7 @@ retriever = vector_store.as_retriever(search_kwargs={'k':1})
 llm = ChatOpenAI(model="gpt-4o-mini", openai_api_key=openai.api_key, temperature=0.7)
 prompt_template = PromptTemplate(
     template="""
-    Use the following context to answer the question as accurately as possible using only the context provided succintly. If you are not sure or don't know, say 'Sorry, I don't understand. Please ask again with more detail.':
+    Use the following context to answer the question as accurately as possible in approximately 75 words or less using only the context provided. If you are not sure or don't know, say 'Sorry I don't quite understand, please try again.':
     Context: {context}
     Question: {question}
     Answer:""",
@@ -39,7 +39,7 @@ prompt_template = PromptTemplate(
 llm_chain = prompt_template | llm | StrOutputParser()
 
 def query(q):
-    docs = vector_store.similarity_search(query=q, k=1)
+    docs = vector_store.similarity_search(query=q, k=3)
     '''retriever.invoke(query)'''
     for doc in docs:
         print(doc.page_content)

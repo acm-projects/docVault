@@ -1,9 +1,55 @@
 "use client";
 import CustomBtn from "@/components/ui/customBtn";
-import { Dropdown } from "@/components/ui/Dropdown";
 import Link from "next/link";
+import { useState } from "react";
+import { CognitoUserPool, CognitoUserAttribute } from "amazon-cognito-identity-js";
+import { Dropdown } from "@/components/ui/Dropdown";
+
+// AWS Cognito User Pool Configuration
+const poolData = {
+  UserPoolId: "us-east-2_AjxQIAAbO",
+  ClientId: "4ebe6m05covmud0fdeecck98os",
+};
+
+const userPool = new CognitoUserPool(poolData);
 
 export default function Signup() {
+  // State to store form input values
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Validate passwords match
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    // Create Cognito user attributes
+    const attributes = [
+      new CognitoUserAttribute({ Name: "email", Value: email }),
+      new CognitoUserAttribute({ Name: "given_name", Value: firstName }),
+      new CognitoUserAttribute({ Name: "family_name", Value: lastName }),
+    ];
+
+    // Perform sign up using Cognito
+    userPool.signUp(email, password, attributes, [], (err, result) => {
+      if (err) {
+        console.error("Signup error:", err);
+        alert(err.message || "Signup failed");
+        return;
+      }
+
+      alert("Signup successful! Check your email for verification.");
+      console.log("User signup result:", result);
+    });
+  };
 
   return (
     <>
@@ -12,7 +58,7 @@ export default function Signup() {
                 <div className="pt-5 pb-10">
                     <h1 className="text-5xl font-bold text-lighterred">Sign Up</h1>
                 </div>
-              <form className="space-y-6" action="#" method="POST">
+              <form onSubmit={handleSubmit} className="space-y-6">
               <div className="flex flex-row gap-6 w-full"> 
             <div className="w-1/2">
               <label
@@ -29,6 +75,8 @@ export default function Signup() {
                   placeholder="First Name"
                   autoComplete="firstName"
                   required
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                   className="border border-middlegray block w-full rounded-md py-1.5 px-3 text-gray-900 
                             shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
                   />
@@ -50,6 +98,8 @@ export default function Signup() {
                   placeholder="Last Name"
                   autoComplete="lastName"
                   required
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                   className="border border-middlegray block w-full rounded-md py-1.5 px-3 text-gray-900 
                             shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
                   />
@@ -72,6 +122,8 @@ export default function Signup() {
                     placeholder="Email address"
                     autoComplete="email"
                     required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="border border-middlegray block w-full rounded-md py-1.5 px-3 text-gray-900 
                             shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
                     />
@@ -95,6 +147,8 @@ export default function Signup() {
                       placeholder="Password"
                       autoComplete="current-password"
                       required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       className="border border-middlegray block w-full rounded-md py-1.5 px-3 text-gray-900 
                             shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
                     />
@@ -118,6 +172,8 @@ export default function Signup() {
                       placeholder="Confirm Password"
                       autoComplete="current-password"
                       required
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                       className="border border-middlegray block w-full rounded-md py-1.5 px-3 text-gray-900 
                             shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
                     />
@@ -134,7 +190,7 @@ export default function Signup() {
                     </label>
                   </div>
                   <div className="mt-2">
-                    <Dropdown />
+                    <Dropdown/>
                   </div>
                 </div>
 
