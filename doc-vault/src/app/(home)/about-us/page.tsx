@@ -22,7 +22,7 @@ const About = () => {
           </div>
 
           <div className="p-4 flex justify-center w-1/2">
-            <Image className="rounded-md" alt="some image" unoptimized width={400} height={500} src="https://placehold.co/400x500" />
+            <Image className="rounded-md" alt="some image" unoptimized width={500} height={500} src="../stats.png" />
           </div>
     </div>
   )

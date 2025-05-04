@@ -4,28 +4,16 @@ import React from 'react'
 const Features = () => {
   const features = [
     {
-      caption: "Automatically categorizes and stores documents upon download.",
-      img: "https://placehold.co/600x400",
+      caption: "Automatically categorizes and stores documents upon download into relevant folders.",
+      img: "../folders.png",
     },
     {
-      caption: "Extracts text from documents for content analysis.",
-      img: "https://placehold.co/600x400",
-    },
-    {
-      caption: "Organizes documents into relevant folders (Financial, Legal, Personal, etc.).",
-      img: "https://placehold.co/600x400",
-    },
-    {
-      caption: "Translates documents into English.",
-      img: "https://placehold.co/600x400",
+      caption: "Translates documents into over 70 languages.",
+      img: "../translate.png",
     },
     {
       caption: "Answers document-related questions and assists with form completion.",
-      img: "https://placehold.co/600x400",
-    },
-    {
-      caption: "Documents stored safely in Amazon S3 with easy retrieval.",
-      img: "https://placehold.co/600x400",
+      img: "../chatbot.png",
     },
   ]
 
@@ -38,7 +26,7 @@ const Features = () => {
           and efficient. Our intuitive platform offers everything you need to 
           organize, collaborate, and access your files effortlessly. 
         </p>
-        <div className="p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-10">
+        <div className="p-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-15 items-center justify-center">
           {features.map((feature) => (
             <div key={feature.caption}>
               <Image width={600} height={400} unoptimized alt={feature.caption} src={feature.img} className="w-50 h-50 rounded-md"/>

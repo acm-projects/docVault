@@ -39,7 +39,7 @@ export function AppSidebar() {
             <Image src="/LogoWhite.png" alt="docVault" height={100} width={200} />
           </SidebarHeader>
         </Link>
-        <SidebarContent>
+        <SidebarContent className="overflow-x-hidden">
           <SidebarMenu className="flexCenter">
             <SidebarMenuItem className="py-5">
               <SidebarMenuButton

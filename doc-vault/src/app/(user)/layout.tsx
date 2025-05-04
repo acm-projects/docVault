@@ -11,6 +11,7 @@ import { UserProvider } from "@/context/UserContext";
 import NewFile from "./newFile/page";
 import { Menu } from "lucide-react";
 import Chat from "@/components/Chat"
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "docVault",
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ }: Readonly<{ children: React.ReactNode;}>) {
   return (
     <UserProvider>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body className="flex flex-col min-h-screen">
         <Chat/>
         <SidebarProvider>
@@ -32,10 +33,17 @@ export default function RootLayout({ }: Readonly<{ children: React.ReactNode;}>)
               </header>
 
               <main className="flex-1 p-4">
-                <NewFile />
-                <section id="personal"><Personal /></section>
-                <section id="school"><School /></section>
-                <section id="work"><Work /></section>
+                <ThemeProvider
+                  attribute="class"
+                  defaultTheme="light"
+                  enableSystem
+                  disableTransitionOnChange
+                >
+                  <NewFile />
+                  <section id="personal"><Personal /></section>
+                  <section id="school"><School /></section>
+                  <section id="work"><Work /></section>
+                </ThemeProvider>
               </main>
             </div>
           </SidebarProvider>

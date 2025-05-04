@@ -167,9 +167,9 @@ body {
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
-    --sidebar-background: 0, 84%, 44%; /* Red (#D90429) */
+    --sidebar-background: 0, 84%, 44%; /* Red */
     --sidebar-foreground: 0 0% 100%; /* White */
-    --sidebar-primary: 0, 84%, 52%; /* Lighter red (#EF233C) */
+    --sidebar-primary: 0, 84%, 52%; /* Lighter red */
     --sidebar-primary-foreground: 0, 84%, 52%; /* White */
     --sidebar-accent: 0, 84%, 52%; /* Lighter red for selection highlight */
     --sidebar-accent-foreground: 0 0% 100%; /* White */
@@ -177,13 +177,13 @@ body {
     --sidebar-ring: 0, 84%, 52%; /* Lighter red */
   }
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 231 20% 21%;
+    --foreground: 0 0% 100%;
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
+    --primary: 0 0% 100%;
     --primary-foreground: 0 0% 9%;
     --secondary: 0 0% 14.9%;
     --secondary-foreground: 0 0% 98%;
@@ -194,7 +194,7 @@ body {
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
+    --input: 0 0% 85%;
     --ring: 0 0% 83.1%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
